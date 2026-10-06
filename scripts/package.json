@@ -1,0 +1,12 @@
+{
+  "name": "hackaton-scripts",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "cargar-datos": "node cargarDatosIniciales.mjs",
+    "admin": "node asignarAdmin.mjs"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.0.0"
+  }
+}

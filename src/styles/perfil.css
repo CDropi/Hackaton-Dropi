@@ -1,0 +1,79 @@
+/* ============================================================
+   perfil.css — datos del participante
+   ============================================================ */
+.perfil{display:flex;flex-direction:column;gap:14px;}
+
+.perfil-cabecera{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:6px;}
+.perfil-avatar{
+  width:84px;height:84px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'Tusker',sans-serif;
+  font-weight:700;
+  font-size:36px;
+  background:linear-gradient(to top, var(--naranja), var(--naranja-profundo));
+  border:2px solid rgba(255,255,255,.35);
+}
+.perfil-nombre{
+  font-family:'Tusker',sans-serif;
+  font-weight:700;
+  font-size:32px;
+  text-transform:uppercase;
+  letter-spacing:.02em;
+  line-height:1.05;
+  margin:14px 0 8px;
+}
+.perfil-rol{
+  font-size:12.5px;
+  font-weight:700;
+  padding:5px 16px;
+  border-radius:999px;
+  background:rgba(237,111,45,.22);
+  border:1px solid var(--naranja);
+}
+
+.perfil-datos{
+  margin:0;
+  padding:6px 18px;
+  border-radius:var(--radio);
+  background:var(--vidrio-oscuro);
+  border:1px solid var(--linea);
+}
+.perfil-dato{display:flex;align-items:center;gap:12px;padding:12px 0;}
+.perfil-dato + .perfil-dato{border-top:1px solid var(--linea);}
+.perfil-dato img{width:18px;height:18px;flex-shrink:0;}
+.perfil-dato dd{margin:0;font-size:14px;word-break:break-all;}
+
+.perfil-entrega{
+  padding:18px;
+  border-radius:var(--radio);
+  background:var(--vidrio-oscuro);
+  border:1px solid var(--linea);
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:10px;
+}
+.perfil-entrega-titulo{font-size:14px;font-weight:700;margin:0;color:var(--naranja-claro);}
+.perfil-entrega-texto{font-size:14px;line-height:1.55;margin:0;color:var(--texto-suave);}
+.perfil-entrega-texto strong{color:#fff;}
+
+.perfil-enlace{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:16px 18px;
+  border-radius:var(--radio);
+  background:var(--vidrio-oscuro);
+  border:1px solid var(--linea);
+  text-decoration:none;
+  font-size:14px;
+}
+.perfil-enlace span{flex:1;}
+.perfil-enlace-icono{width:20px;height:20px;}
+.perfil-enlace-flecha{width:12px;height:12px;opacity:.7;}
+
+.perfil-salir{margin-top:8px;}
+.perfil-salir img{width:16px;height:16px;}

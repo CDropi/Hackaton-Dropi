@@ -1,0 +1,284 @@
+/* ============================================================
+   ingreso.css — pantallas de acceso (login, registro, completar
+   perfil) y el armazón de la app del participante (scroll + menú).
+   ============================================================ */
+
+/* ---- Pantallas de acceso ---- */
+.acceso{
+  min-height:100vh;
+  min-height:100dvh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:calc(32px + env(safe-area-inset-top)) 20px calc(32px + env(safe-area-inset-bottom));
+}
+.acceso-card{
+  width:100%;
+  max-width:380px;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+}
+.acceso-card form{display:flex;flex-direction:column;}
+.acceso-card--registro{max-width:420px;}
+.acceso-barra{display:flex;margin-bottom:6px;}
+.acceso-fechas{
+  font-size:13px;
+  color:var(--texto-suave);
+  margin:10px 0 0;
+}
+.acceso-titulo{
+  font-family:'Tusker',sans-serif;
+  font-weight:700;
+  font-size:40px;
+  line-height:1.05;
+  text-transform:uppercase;
+  letter-spacing:.03em;
+  margin:28px 0 20px;
+}
+.acceso-texto{
+  font-size:14px;
+  line-height:1.55;
+  color:var(--texto-suave);
+  margin:-6px 0 20px;
+}
+.acceso-texto strong{color:#fff;}
+.acceso-pie{font-size:13px;margin:22px 0 0;color:var(--texto-suave);}
+
+.separador{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:18px 0;
+  font-size:12px;
+  color:var(--texto-tenue);
+}
+.separador::before,
+.separador::after{content:"";flex:1;height:1px;background:var(--linea);}
+
+/* ---- Selector de rol ---- */
+.selector-rol{
+  border:none;
+  padding:0;
+  margin:6px 0 14px;
+  text-align:left;
+}
+.selector-rol-titulo{font-weight:700;font-size:14px;margin-bottom:10px;padding:0;}
+.selector-rol-opciones{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.selector-rol-opcion{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  padding:14px 12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.25);
+  background:rgba(10,8,6,.38);
+  cursor:pointer;
+  transition:border-color .15s ease, background .15s ease;
+}
+.selector-rol-opcion:hover{border-color:rgba(255,255,255,.5);}
+.selector-rol-opcion:focus-within{outline:2px solid var(--naranja-claro);outline-offset:2px;}
+.selector-rol-opcion--activa,
+.selector-rol-opcion--activa:hover{
+  border-color:var(--naranja);
+  background:linear-gradient(to top, rgba(237,111,45,.55), rgba(141,46,0,.55));
+}
+.selector-rol-nombre{
+  font-family:'Tusker',sans-serif;
+  font-weight:700;
+  font-size:22px;
+  text-transform:uppercase;
+  letter-spacing:.02em;
+  line-height:1;
+}
+.selector-rol-descripcion{font-size:12px;line-height:1.4;color:var(--texto-suave);}
+.selector-rol-opcion--activa .selector-rol-descripcion{color:#fff;}
+.selector-rol-nota{font-size:11.5px;color:var(--texto-tenue);margin:8px 0 0;line-height:1.4;}
+
+/* ---- Celular con indicativo ---- */
+.campo-celular{display:flex;gap:8px;}
+.campo-celular-pais{
+  width:auto;
+  flex:0 0 112px;
+  padding-left:12px;
+  padding-right:8px;
+  text-align:left;
+  appearance:auto;
+}
+.campo-celular-pais option{color:#111;}
+.campo-celular-numero{flex:1;min-width:0;text-align:left;}
+
+/* ---- Autorización de datos ---- */
+.casilla-politica{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  text-align:left;
+  font-size:12.5px;
+  line-height:1.45;
+  color:var(--texto-suave);
+  margin:2px 0 16px;
+  cursor:pointer;
+}
+.casilla-politica input{
+  flex-shrink:0;
+  width:18px;height:18px;
+  margin:1px 0 0;
+  accent-color:var(--naranja);
+}
+.casilla-politica a{color:#fff;font-weight:700;}
+
+/* ============================================================
+   App del participante: área con scroll + menú inferior fijo
+   ============================================================ */
+.app-shell{
+  position:fixed;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+}
+.app-scroll{
+  flex:1;
+  min-height:0;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:calc(20px + env(safe-area-inset-top)) 18px 90px;
+}
+.app-scroll > *{width:100%;max-width:var(--ancho-contenido);}
+.app-marca{margin-bottom:18px;}
+
+/* ---- Encabezado de cada pestaña ---- */
+.pantalla-encabezado{text-align:center;margin-bottom:20px;}
+.pantalla-saludo{
+  font-family:'Tusker',sans-serif;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.03em;
+  font-size:32px;
+  line-height:1.05;
+  margin:0 0 10px;
+}
+.pantalla-descripcion{
+  font-size:14px;
+  line-height:1.55;
+  color:var(--texto-suave);
+  margin:0 auto;
+  max-width:34ch;
+}
+
+/* ---- Menú inferior (heredado de ExpoWinners) ---- */
+.nav-wrapper{
+  position:relative;
+  flex:0 0 auto;
+  background:#000;
+  padding-bottom:env(safe-area-inset-bottom);
+  z-index:20;
+}
+@property --nav-hole-x{
+  syntax:'<percentage>';
+  inherits:false;
+  initial-value:0%;
+}
+.bottom-nav{
+  --nav-hole-x:0%;
+  position:relative;
+  height:64px;
+  margin:0;
+  background:#000;
+  border-radius:0;
+  overflow:visible;
+  /* Capa 1: la barra completa, siempre 100% visible.
+     Capa 2: la MISMA forma de hueco fija (no se recalcula nunca),
+     que solo se desliza de posición con mask-position — una
+     animación nativa y liviana, a diferencia de intentar "morfear"
+     un clip-path entre dos formas distintas (eso es lo que fallaba
+     en celulares). El modo "subtract" hace que la capa 2 recorte
+     un hueco real en la capa 1, sin ocultar el resto de la barra. */
+  -webkit-mask-image:
+    linear-gradient(#000,#000),
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20130%2064'%3E%3Cpath%20d%3D'M%200.00%200.00%20L%2019.75%200.00%20L%2021.71%200.12%20L%2023.64%200.48%20L%2025.52%201.08%20L%2027.31%201.90%20L%2028.98%202.94%20L%2030.52%204.17%20L%2031.89%205.58%20L%2033.08%207.15%20L%2034.06%208.85%20L%2034.83%2010.67%20L%2038.34%2017.70%20L%2043.46%2023.66%20L%2049.87%2028.20%20L%2057.20%2031.04%20L%2065.00%2032.00%20L%2072.80%2031.04%20L%2080.13%2028.20%20L%2086.54%2023.66%20L%2091.66%2017.70%20L%2095.17%2010.67%20L%2095.94%208.85%20L%2096.92%207.15%20L%2098.11%205.58%20L%2099.48%204.17%20L%20101.02%202.94%20L%20102.69%201.90%20L%20104.48%201.08%20L%20106.36%200.48%20L%20108.29%200.12%20L%20110.25%200.00%20L%20130.00%200.00%20L%20130.00%2064.00%20L%200.00%2064.00%20Z'%20fill%3D'black'%2F%3E%3C%2Fsvg%3E");
+  mask-image:
+    linear-gradient(#000,#000),
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20130%2064'%3E%3Cpath%20d%3D'M%200.00%200.00%20L%2019.75%200.00%20L%2021.71%200.12%20L%2023.64%200.48%20L%2025.52%201.08%20L%2027.31%201.90%20L%2028.98%202.94%20L%2030.52%204.17%20L%2031.89%205.58%20L%2033.08%207.15%20L%2034.06%208.85%20L%2034.83%2010.67%20L%2038.34%2017.70%20L%2043.46%2023.66%20L%2049.87%2028.20%20L%2057.20%2031.04%20L%2065.00%2032.00%20L%2072.80%2031.04%20L%2080.13%2028.20%20L%2086.54%2023.66%20L%2091.66%2017.70%20L%2095.17%2010.67%20L%2095.94%208.85%20L%2096.92%207.15%20L%2098.11%205.58%20L%2099.48%204.17%20L%20101.02%202.94%20L%20102.69%201.90%20L%20104.48%201.08%20L%20106.36%200.48%20L%20108.29%200.12%20L%20110.25%200.00%20L%20130.00%200.00%20L%20130.00%2064.00%20L%200.00%2064.00%20Z'%20fill%3D'black'%2F%3E%3C%2Fsvg%3E");
+  -webkit-mask-size:100% 100%, 33.3334% 100%;
+  mask-size:100% 100%, 33.3334% 100%;
+  -webkit-mask-repeat:no-repeat, no-repeat;
+  mask-repeat:no-repeat, no-repeat;
+  -webkit-mask-position:0 0, var(--nav-hole-x) 0;
+  mask-position:0 0, var(--nav-hole-x) 0;
+  -webkit-mask-composite:source-over, destination-out;
+  mask-composite:add, subtract;
+  transition:--nav-hole-x .48s cubic-bezier(.34,1.56,.64,1);
+}
+.nav-items-row{
+  display:flex;
+  width:100%;
+  height:100%;
+  position:relative;
+  z-index:1;
+}
+.nav-item{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:transparent;
+  border:none;
+  margin:0;
+  padding:18px 4px;
+  color:rgba(255,255,255,.55);
+  cursor:pointer;
+  transition:opacity .2s ease;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-appearance:none;
+  appearance:none;
+  outline:none !important;
+  box-shadow:none !important;
+  user-select:none;
+  -webkit-user-select:none;
+}
+.nav-item:hover,
+.nav-item:focus,
+.nav-item:focus-visible,
+.nav-item:active{
+  outline:none !important;
+  box-shadow:none !important;
+  background:transparent !important;
+  transform:none !important;
+}
+.nav-item img{width:20px;height:20px;}
+.nav-item.active{opacity:0;}
+
+/* El ícono activo se desliza en tiempo real con transform (nativo,
+   liviano, funciona en cualquier celular), sincronizado con el hueco
+   de arriba que se mueve con la misma duración/curva. */
+.nav-indicator{
+  position:absolute;
+  top:-22px;
+  left:0;
+  width:33.3333%;
+  height:60px;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .48s cubic-bezier(.34,1.56,.64,1);
+  z-index:2;
+  pointer-events:none;
+}
+.nav-indicator-circle{
+  flex-shrink:0;
+  width:60px;height:60px;
+  border-radius:50%;
+  background:var(--naranja);
+  color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 16px -6px rgba(0,0,0,.5);
+}
+.nav-indicator-circle img{width:25px;height:25px;}
+
+
+
+
+.nav-item{flex-direction:column;gap:4px;padding:10px 4px;}
+.nav-item-texto{font-size:10.5px;font-weight:700;color:rgba(255,255,255,.7);}

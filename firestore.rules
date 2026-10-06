@@ -1,0 +1,157 @@
+rules_version = '2';
+
+// =====================================================================
+//  Hackatón Dropi — Reglas de seguridad de Firestore
+//
+//  Principios (heredados de ExpoWinners):
+//  - Nadie lista colecciones salvo los admins (evita enumeración masiva, H-11).
+//  - Cada persona solo lee/escribe lo suyo; el ID del documento es su uid (evita IDOR, H-17).
+//  - Las fechas de cierre se validan aquí con request.time, nunca en el cliente.
+//  - Los admins se identifican por custom claim (token.admin), nunca por un campo del documento.
+// =====================================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- Helpers generales ----------
+
+    function autenticado() {
+      return request.auth != null;
+    }
+
+    function esAdmin() {
+      return autenticado() && request.auth.token.admin == true;
+    }
+
+    function esDueno(uid) {
+      return autenticado() && request.auth.uid == uid;
+    }
+
+    function perfilDe(uid) {
+      return get(/databases/$(database)/documents/usuarios/$(uid)).data;
+    }
+
+    function configEvento() {
+      return get(/databases/$(database)/documents/config/evento).data;
+    }
+
+    function textoEntre(valor, minimo, maximo) {
+      return valor is string && valor.size() >= minimo && valor.size() <= maximo;
+    }
+
+    function rolValido(rol) {
+      return rol in ['dropshipper', 'proveedor'];
+    }
+
+    function telefonoValido(telefono) {
+      return telefono is string && telefono.matches('^[+]?[0-9 ]{7,20}$');
+    }
+
+    // Ventana de entregas definida en config/evento (hora del servidor)
+    function dentroDeVentana() {
+      let cfg = configEvento();
+      return request.time >= cfg.inicioEntregas && request.time < cfg.cierreEntregas;
+    }
+
+    // ---------- Helpers de usuarios ----------
+
+    function perfilValidoAlCrear(d) {
+      return d.keys().hasOnly(['nombre', 'email', 'telefono', 'rol', 'aceptaPolitica', 'creadoEn'])
+        && d.keys().hasAll(['nombre', 'email', 'telefono', 'rol', 'aceptaPolitica', 'creadoEn'])
+        && textoEntre(d.nombre, 2, 80)
+        && d.email == request.auth.token.email
+        && telefonoValido(d.telefono)
+        && rolValido(d.rol)
+        && d.aceptaPolitica == true   // autorización de tratamiento de datos (Ley 1581)
+        && d.creadoEn == request.time;
+    }
+
+    // Solo se puede editar nombre y teléfono. El rol es inmutable: define la categoría.
+    function perfilValidoAlEditar(d) {
+      return d.diff(resource.data).affectedKeys().hasOnly(['nombre', 'telefono'])
+        && textoEntre(d.nombre, 2, 80)
+        && telefonoValido(d.telefono);
+    }
+
+    // ---------- Helpers de entregas ----------
+
+    function contenidoEntregaValido(d) {
+      return d.enlaceArtifact is string
+        && d.enlaceArtifact.size() <= 300
+        && d.enlaceArtifact.matches('^https://claude[.]ai/[A-Za-z0-9._~/?=&%-]+$')
+        && textoEntre(d.queSoluciona, 30, 2000)
+        && textoEntre(d.comoLoHizo, 30, 3000);
+    }
+
+    function entregaValidaAlCrear(uid, d) {
+      return d.keys().hasOnly(['enlaceArtifact', 'queSoluciona', 'comoLoHizo', 'rol', 'creadoEn', 'actualizadoEn'])
+        && d.keys().hasAll(['enlaceArtifact', 'queSoluciona', 'comoLoHizo', 'rol', 'creadoEn', 'actualizadoEn'])
+        && contenidoEntregaValido(d)
+        && d.rol == perfilDe(uid).rol
+        && d.creadoEn == request.time
+        && d.actualizadoEn == request.time;
+    }
+
+    // Solo aplica si config/evento.permiteEditarEntrega == true
+    function entregaValidaAlEditar(d) {
+      return d.diff(resource.data).affectedKeys().hasOnly(['enlaceArtifact', 'queSoluciona', 'comoLoHizo', 'actualizadoEn'])
+        && contenidoEntregaValido(d)
+        && d.actualizadoEn == request.time;
+    }
+
+    // =================================================================
+    //  Colecciones
+    // =================================================================
+
+    // Perfil de cada participante. ID = uid.
+    match /usuarios/{uid} {
+      allow get: if esDueno(uid) || esAdmin();
+      allow list: if esAdmin();
+      allow create: if esDueno(uid) && perfilValidoAlCrear(request.resource.data);
+      allow update: if esDueno(uid) && perfilValidoAlEditar(request.resource.data);
+      allow delete: if false;
+    }
+
+    // Fechas del evento y flags. Solo lectura para participantes.
+    match /config/{docId} {
+      allow read: if autenticado();
+      allow write: if esAdmin();
+    }
+
+    // Días del bootcamp con sus charlas y enlaces de Meet. Solo usuarios registrados.
+    match /cronograma/{diaId} {
+      allow read: if autenticado();
+      allow write: if esAdmin();
+    }
+
+    // Un reto por rol: retos/dropshipper y retos/proveedor.
+    // Cada quien solo ve el de su rol, y solo desde la fecha visibleDesde.
+    match /retos/{rol} {
+      allow get: if esAdmin()
+        || (autenticado()
+            && perfilDe(request.auth.uid).rol == rol
+            && request.time >= resource.data.visibleDesde);
+      allow list: if esAdmin();
+      allow write: if esAdmin();
+    }
+
+    // Una entrega por persona. ID = uid.
+    match /entregas/{uid} {
+      allow get: if esDueno(uid) || esAdmin();
+      allow list: if esAdmin();
+      allow create: if esDueno(uid)
+        && dentroDeVentana()
+        && entregaValidaAlCrear(uid, request.resource.data);
+      allow update: if esDueno(uid)
+        && configEvento().permiteEditarEntrega == true
+        && dentroDeVentana()
+        && entregaValidaAlEditar(request.resource.data);
+      allow delete: if false;
+    }
+
+    // Todo lo demás queda cerrado.
+    match /{documento=**} {
+      allow read, write: if false;
+    }
+  }
+}
