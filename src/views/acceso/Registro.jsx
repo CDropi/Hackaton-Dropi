@@ -66,7 +66,7 @@ export default function Registro({ onRegistrar, onVolver }) {
       <div className="acceso-barra">
         <BotonRegresar onClick={onVolver} etiqueta="Volver a iniciar sesión" />
       </div>
-      <Marca tamano="pequena" />
+      <div className="solo-movil"><Marca tamano="pequena" /></div>
       <h1 className="acceso-titulo">Crea tu cuenta</h1>
 
       {!navegadorInterno && (

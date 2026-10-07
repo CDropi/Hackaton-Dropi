@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { aFecha, horaLocal, zonaLocal, fechaEvento, claveDiaEvento } from '../../utils/fechas.js';
+import { ahora as horaActual } from '../../utils/reloj.js';
 import '../../styles/cronograma.css';
 
 // Cada cuánto se recalcula qué charla está "en vivo" (sin volver a leer Firestore)
@@ -45,16 +46,16 @@ function diaInicial(dias, ahora) {
 }
 
 export default function CronogramaView({ perfil, cronograma, error, onReintentar }) {
-  const [ahora, setAhora] = useState(() => new Date());
+  const [ahora, setAhora] = useState(() => horaActual());
   const [diaActivo, setDiaActivo] = useState(null);
 
   useEffect(() => {
-    const id = setInterval(() => setAhora(new Date()), INTERVALO_RELOJ_MS);
+    const id = setInterval(() => setAhora(horaActual()), INTERVALO_RELOJ_MS);
     return () => clearInterval(id);
   }, []);
 
   useEffect(() => {
-    if (cronograma?.length && !diaActivo) setDiaActivo(diaInicial(cronograma, new Date()));
+    if (cronograma?.length && !diaActivo) setDiaActivo(diaInicial(cronograma, horaActual()));
   }, [cronograma, diaActivo]);
 
   const dia = useMemo(() => cronograma?.find(d => d.id === diaActivo), [cronograma, diaActivo]);

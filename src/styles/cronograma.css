@@ -80,3 +80,12 @@
   .charla{grid-template-columns:1fr;}
   .charla-hora{flex-direction:row;align-items:baseline;gap:10px;border-right:none;border-bottom:1px solid var(--linea);padding:0 0 10px;}
 }
+
+@media (min-width:960px){
+  .cronograma .tabs-dias{max-width:560px;}
+  .cronograma-zona{text-align:left;}
+  .charla{grid-template-columns:120px minmax(0,1fr);gap:24px;padding:22px 24px;}
+  .charla-hora-inicio{font-size:36px;}
+  .charla-tema{font-size:18px;}
+  .charla-conferencista{font-size:14.5px;}
+}

@@ -128,3 +128,30 @@
 }
 .entrega-subtitulo{font-size:13px;font-weight:700;margin:0 0 6px;color:var(--texto-suave);}
 .entrega-respuesta{font-size:14px;line-height:1.6;margin:0 0 16px;white-space:pre-wrap;}
+
+@media (min-width:960px){
+  .reto-encabezado{text-align:left;}
+  .reto-titulo{font-size:56px;}
+  .reto-bloqueado{max-width:560px;margin:40px auto 0;}
+}
+/* Dos columnas solo cuando hay espacio real para ambas */
+@media (min-width:1200px){
+  .reto-columnas{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 380px;
+    gap:24px;
+    align-items:start;
+  }
+  .reto-columnas .entrega{margin-top:0;}
+}
+
+.reto-ejemplo{
+  display:inline-block;
+  margin-left:8px;
+  font-size:11.5px;
+  font-weight:700;
+  padding:5px 12px;
+  border-radius:999px;
+  background:#FFD23F;
+  color:#1a1300;
+}

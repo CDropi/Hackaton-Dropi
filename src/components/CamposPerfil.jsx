@@ -1,4 +1,5 @@
 import { ROLES, PAISES, URL_POLITICA_DATOS } from '../config.js';
+import SelectorPais from './SelectorPais.jsx';
 
 // Piezas del formulario de perfil que comparten Registro (correo) y
 // CompletarPerfil (Google): selector de rol, celular con indicativo y la
@@ -19,8 +20,11 @@ export function SelectorRol({ valor, onCambio }) {
               onChange={() => onCambio(rol.id)}
               className="sr-only"
             />
-            <span className="selector-rol-nombre">{rol.nombre}</span>
-            <span className="selector-rol-descripcion">{rol.descripcion}</span>
+            <span className="selector-rol-radio" aria-hidden="true" />
+            <span className="selector-rol-textos">
+              <span className="selector-rol-nombre">{rol.nombre}</span>
+              <span className="selector-rol-descripcion">{rol.descripcion}</span>
+            </span>
           </label>
         ))}
       </div>
@@ -32,17 +36,9 @@ export function SelectorRol({ valor, onCambio }) {
 export function CampoCelular({ pais, onCambioPais, celular, onCambioCelular }) {
   return (
     <div className="campo-celular">
-      <label htmlFor="paisCelular" className="sr-only">País</label>
-      <select
-        id="paisCelular"
-        className="campo-input campo-celular-pais"
-        value={pais}
-        onChange={e => onCambioPais(e.target.value)}
-      >
-        {PAISES.map(p => (
-          <option key={p.id} value={p.id}>{p.id} {p.indicativo}</option>
-        ))}
-      </select>
+      {/* Antes era un <select> nativo: no permite mostrar imágenes y en
+          Windows los emojis de bandera se ven como letras ("CO"). */}
+      <SelectorPais valor={pais} onCambio={onCambioPais} />
       <label htmlFor="numeroCelular" className="sr-only">Número de celular</label>
       <input
         id="numeroCelular"

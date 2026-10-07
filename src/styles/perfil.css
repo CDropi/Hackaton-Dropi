@@ -2,6 +2,7 @@
    perfil.css — datos del participante
    ============================================================ */
 .perfil{display:flex;flex-direction:column;gap:14px;}
+.perfil-columna{display:flex;flex-direction:column;gap:14px;}
 
 .perfil-cabecera{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:6px;}
 .perfil-avatar{
@@ -77,3 +78,23 @@
 
 .perfil-salir{margin-top:8px;}
 .perfil-salir img{width:16px;height:16px;}
+
+@media (min-width:960px){
+  .perfil{
+    display:grid;
+    grid-template-columns:280px minmax(0,1fr);
+    gap:20px;
+    align-items:start;
+    max-width:820px;
+  }
+  .perfil-cabecera{
+    margin:0;
+    padding:32px 20px 28px;
+    border-radius:var(--radio);
+    background:var(--vidrio-oscuro);
+    border:1px solid var(--linea);
+  }
+  .perfil-nombre{font-size:30px;}
+  .perfil-columna{display:flex;flex-direction:column;gap:14px;}
+  .perfil-salir{margin-top:0;align-self:flex-start;width:auto;}
+}

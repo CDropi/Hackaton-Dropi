@@ -73,8 +73,10 @@ export default function Login({ onIrARegistro }) {
 
   return (
     <div className="acceso-card">
-      <Marca />
-      <p className="acceso-fechas">{EVENTO.fechas}</p>
+      <div className="solo-movil">
+        <Marca />
+        <p className="acceso-fechas">{EVENTO.fechas}</p>
+      </div>
       <h1 className="acceso-titulo">Inicia sesión</h1>
 
       <form onSubmit={handleIngresar} noValidate>

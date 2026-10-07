@@ -42,7 +42,7 @@ export default function CompletarPerfil({ user, datosIniciales, onCompletado, on
 
   return (
     <div className="acceso-card acceso-card--registro">
-      <Marca tamano="pequena" />
+      <div className="solo-movil"><Marca tamano="pequena" /></div>
       <h1 className="acceso-titulo">Completa tu perfil</h1>
       <p className="acceso-texto">
         Entraste como <strong>{user.email}</strong>. Solo faltan estos datos para participar.

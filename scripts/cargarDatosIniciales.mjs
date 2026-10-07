@@ -97,6 +97,12 @@ const retos = {
     reto: 'POR DEFINIR — qué deben resolver con su Artifact.',
     visibleDesde: fechaColombia('2026-10-19T08:00:00'),
   },
+  marca: {
+    titulo: 'POR DEFINIR',
+    contexto: 'POR DEFINIR — explicación del caso de estudio para dueños de marca.',
+    reto: 'POR DEFINIR — qué deben resolver con su Artifact.',
+    visibleDesde: fechaColombia('2026-10-19T08:00:00'),
+  },
 };
 
 // ---------- Escritura en un solo lote ----------

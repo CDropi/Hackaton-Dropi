@@ -3,6 +3,7 @@ import { ROLES, TEXTO_RETO_BLOQUEADO } from '../../config.js';
 import { enviarEntrega } from '../../lib/dataLayer.js';
 import { aFecha, fechaHoraEvento } from '../../utils/fechas.js';
 import { conNegrillas, parrafos } from '../../utils/texto.jsx';
+import { ahora as horaActual } from '../../utils/reloj.js';
 import '../../styles/reto.css';
 
 // Mismos límites que las reglas de Firestore (contenidoEntregaValido)
@@ -43,7 +44,7 @@ export default function RetoView({ perfil, reto, entrega, config, error, onReint
     );
   }
 
-  if (reto === undefined || entrega === undefined) {
+  if (reto === undefined || entrega === undefined || config === undefined) {
     return <div className="reto"><div className="cargando-bloque"><span className="spinner spinner--claro" /></div></div>;
   }
 
@@ -64,28 +65,34 @@ export default function RetoView({ perfil, reto, entrega, config, error, onReint
     <div className="reto">
       <header className="reto-encabezado">
         <span className="reto-rol">Reto {nombreRol}</span>
+        {reto.deEjemplo && <span className="reto-ejemplo">Texto de ejemplo (modo prueba)</span>}
         <h1 className="reto-titulo">{reto.titulo}</h1>
       </header>
 
-      <section className="reto-seccion">
-        <h2 className="reto-seccion-titulo">El caso</h2>
-        {parrafos(reto.contexto, 'reto-parrafo')}
-      </section>
+      {/* En computador ancho: caso a la izquierda, entrega a la derecha */}
+      <div className="reto-columnas">
+        <div className="reto-texto">
+          <section className="reto-seccion">
+            <h2 className="reto-seccion-titulo">El caso</h2>
+            {parrafos(reto.contexto, 'reto-parrafo')}
+          </section>
 
-      <section className="reto-seccion reto-seccion--destacada">
-        <h2 className="reto-seccion-titulo">Tu reto</h2>
-        {parrafos(reto.reto, 'reto-parrafo')}
-      </section>
+          <section className="reto-seccion reto-seccion--destacada">
+            <h2 className="reto-seccion-titulo">Tu reto</h2>
+            {parrafos(reto.reto, 'reto-parrafo')}
+          </section>
+        </div>
 
-      <SeccionEntrega perfil={perfil} entrega={entrega} config={config} onEntregaEnviada={onEntregaEnviada} />
+        <SeccionEntrega perfil={perfil} entrega={entrega} config={config} onEntregaEnviada={onEntregaEnviada} />
+      </div>
     </div>
   );
 }
 
 function SeccionEntrega({ perfil, entrega, config, onEntregaEnviada }) {
-  const [ahora, setAhora] = useState(() => new Date());
+  const [ahora, setAhora] = useState(() => horaActual());
   useEffect(() => {
-    const id = setInterval(() => setAhora(new Date()), 60 * 1000);
+    const id = setInterval(() => setAhora(horaActual()), 60 * 1000);
     return () => clearInterval(id);
   }, []);
 

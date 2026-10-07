@@ -16,6 +16,8 @@ import {
   doc, getDoc, getDocs, setDoc, collection, query, where, orderBy, serverTimestamp,
 } from "firebase/firestore";
 import { db } from "./firebase.js";
+import { modoPrueba, ahora } from "../utils/reloj.js";
+import { RETOS_PRUEBA } from "../data/retosPrueba.js";
 
 // ---- Perfil ----
 
@@ -55,14 +57,20 @@ export async function obtenerCronograma() {
 
 // Antes de `visibleDesde` las reglas niegan la lectura: eso se devuelve
 // como { bloqueado: true } en vez de un error.
+// En modo prueba, si el reto real sigue bloqueado, se muestra el de ejemplo.
 export async function obtenerReto(rol) {
+  let reto;
   try {
     const snap = await getDoc(doc(db, "retos", rol));
-    return snap.exists() ? { bloqueado: false, ...snap.data() } : { bloqueado: true };
+    reto = snap.exists() ? { bloqueado: false, ...snap.data() } : { bloqueado: true };
   } catch (err) {
-    if (err?.code === "permission-denied") return { bloqueado: true };
-    throw err;
+    if (err?.code !== "permission-denied") throw err;
+    reto = { bloqueado: true };
   }
+  if (reto.bloqueado && modoPrueba && RETOS_PRUEBA[rol]) {
+    return { bloqueado: false, deEjemplo: true, ...RETOS_PRUEBA[rol] };
+  }
+  return reto;
 }
 
 // ---- Entregas ----
@@ -76,6 +84,20 @@ export async function obtenerEntrega(uid) {
 // creación. Si ya existiera, las reglas lo rechazan (mientras
 // permiteEditarEntrega sea false).
 export async function enviarEntrega(uid, rol, { enlaceArtifact, queSoluciona, comoLoHizo }) {
+  // Modo prueba: se simula el envío sin escribir en Firestore (las reglas
+  // lo rechazarían de todos modos antes del 19, porque usan la hora real).
+  if (modoPrueba) {
+    await new Promise(resolve => setTimeout(resolve, 600));
+    return {
+      enlaceArtifact: enlaceArtifact.trim(),
+      queSoluciona: queSoluciona.trim(),
+      comoLoHizo: comoLoHizo.trim(),
+      rol,
+      creadoEn: ahora(),
+      actualizadoEn: ahora(),
+    };
+  }
+
   const datos = {
     enlaceArtifact: enlaceArtifact.trim(),
     queSoluciona: queSoluciona.trim(),

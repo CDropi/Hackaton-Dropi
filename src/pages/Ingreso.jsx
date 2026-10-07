@@ -14,6 +14,9 @@ import CronogramaView from '../views/cronograma/CronogramaView.jsx';
 import RetoView from '../views/reto/RetoView.jsx';
 import PerfilView from '../views/perfil/PerfilView.jsx';
 import Marca from '../components/Marca.jsx';
+import AccesoHero from '../components/AccesoHero.jsx';
+import BannerPrueba from '../components/BannerPrueba.jsx';
+import { ROLES } from '../config.js';
 import '../styles/ingreso.css';
 
 const NAV_ITEMS = [
@@ -22,9 +25,27 @@ const NAV_ITEMS = [
   { key: 'perfil', label: 'Perfil', icon: '/media/Perfil.svg', iconActivo: '/media/Perfil_2.svg' },
 ];
 
+// Pestaña con la que abre la app: el Reto (centro del menú en celular)
+const PESTANA_INICIAL = NAV_ITEMS.findIndex(item => item.key === 'reto');
+
+// En la barra lateral de computador el Reto va primero. En el menú inferior
+// de celular se mantiene NAV_ITEMS, con el Reto en el centro.
+const ORDEN_LATERAL = ['reto', 'cronograma', 'perfil'];
+
 const ERROR_CARGA = 'No pudimos cargar la información. Revisa tu conexión e intenta de nuevo.';
 
+// La franja de modo prueba va por fuera para que se vea en todas las
+// pantallas (acceso y app) sin repetirla en cada return.
 export default function Ingreso() {
+  return (
+    <>
+      <BannerPrueba />
+      <IngresoContenido />
+    </>
+  );
+}
+
+function IngresoContenido() {
   // undefined = todavía no se sabe, null = sin sesión, objeto = con sesión
   const [user, setUser] = useState(undefined);
   // undefined = cargando, null = no tiene perfil, objeto = perfil
@@ -103,10 +124,13 @@ export default function Ingreso() {
 
   if (!user) {
     return (
-      <main className="acceso">
-        {pantallaAcceso === 'login'
-          ? <Login onIrARegistro={() => setPantallaAcceso('registro')} />
-          : <Registro onRegistrar={handleRegistrar} onVolver={() => setPantallaAcceso('login')} />}
+      <main className="acceso acceso--dividido">
+        <AccesoHero />
+        <div className="acceso-columna">
+          {pantallaAcceso === 'login'
+            ? <Login onIrARegistro={() => setPantallaAcceso('registro')} />
+            : <Registro onRegistrar={handleRegistrar} onVolver={() => setPantallaAcceso('login')} />}
+        </div>
       </main>
     );
   }
@@ -144,13 +168,16 @@ export default function Ingreso() {
 
   if (perfil === null) {
     return (
-      <main className="acceso">
-        <CompletarPerfil
-          user={user}
-          datosIniciales={datosPendientes}
-          onCompletado={(p) => { setDatosPendientes(null); setPerfil(p); }}
-          onCerrarSesion={handleCerrarSesion}
-        />
+      <main className="acceso acceso--dividido">
+        <AccesoHero />
+        <div className="acceso-columna">
+          <CompletarPerfil
+            user={user}
+            datosIniciales={datosPendientes}
+            onCompletado={(p) => { setDatosPendientes(null); setPerfil(p); }}
+            onCerrarSesion={handleCerrarSesion}
+          />
+        </div>
       </main>
     );
   }
@@ -168,8 +195,10 @@ function PantallaCarga() {
 // la primera vez que se abre la pestaña que los necesita. Nada se vuelve a
 // leer al cambiar de pestaña.
 function AppParticipante({ perfil, onCerrarSesion }) {
-  const [navActivo, setNavActivo] = useState(0);
-  const [config, setConfig] = useState(null);
+  const [navActivo, setNavActivo] = useState(PESTANA_INICIAL);
+  // undefined = cargando. Ahora que la app abre en el Reto, el formulario
+  // de entrega no debe pintarse antes de conocer la ventana de entregas.
+  const [config, setConfig] = useState(undefined);
   const [cronograma, setCronograma] = useState(null);
   const [errorInicio, setErrorInicio] = useState('');
   const [reto, setReto] = useState(undefined);
@@ -225,9 +254,54 @@ function AppParticipante({ perfil, onCerrarSesion }) {
   }
 
   const pestana = NAV_ITEMS[navActivo].key;
+  const nombreRol = ROLES.find(r => r.id === perfil.rol)?.nombre || perfil.rol;
 
   return (
     <div className="app-shell">
+      {/* Barra lateral: solo en computador. En celular se usa el menú inferior. */}
+      <aside className="app-lateral">
+        <Marca tamano="pequena" />
+        <nav className="app-lateral-nav" aria-label="Secciones">
+          {ORDEN_LATERAL.map(key => {
+            const i = NAV_ITEMS.findIndex(item => item.key === key);
+            const item = NAV_ITEMS[i];
+            return (
+            <button
+              key={item.key}
+              type="button"
+              className={`app-lateral-item ${i === navActivo ? 'app-lateral-item--activo' : ''}`}
+              aria-current={i === navActivo ? 'page' : undefined}
+              onClick={() => cambiarPestana(i)}
+            >
+              <img src={i === navActivo ? item.iconActivo : item.icon} alt="" width={20} height={20} />
+              {item.label}
+            </button>
+            );
+          })}
+        </nav>
+        <div className="app-lateral-usuario">
+          <span className="app-lateral-usuario-nombre">{perfil.nombre}</span>
+          <span className="app-lateral-usuario-rol">{nombreRol}</span>
+          {/* En computador cerrar sesión vive aquí, siempre visible.
+              En celular sigue en la pestaña Perfil. */}
+          <button type="button" className="app-lateral-salir" onClick={onCerrarSesion}>
+            <img src="/media/LogOut.svg" alt="" width={16} height={16} />
+            Cerrar sesión
+          </button>
+        </div>
+      </aside>
+
+      {/* Cerrar sesión en celular: botón de vidrio fijo arriba a la derecha,
+          como en ExpoWinners. En computador se oculta (está en la barra lateral). */}
+      <button
+        type="button"
+        className="btn-salir-flotante"
+        onClick={onCerrarSesion}
+        aria-label="Cerrar sesión"
+      >
+        <img src="/media/LogOut.svg" alt="" />
+      </button>
+
       <div className="app-scroll" ref={scrollRef}>
         <div className="app-marca"><Marca tamano="pequena" /></div>
 

@@ -114,7 +114,6 @@ button:disabled{opacity:.55;cursor:default;}
   display:flex;
   flex-direction:column;
   align-items:center;
-  line-height:.9;
 }
 .marca-texto-principal{
   font-family:'Tusker',sans-serif;
@@ -122,6 +121,9 @@ button:disabled{opacity:.55;cursor:default;}
   text-transform:uppercase;
   letter-spacing:.02em;
   font-size:64px;
+  /* line-height 1 (antes .9): en Chrome de Windows la Tusker se dibujaba
+     más alta y "Dropi" quedaba montado sobre la palabra */
+  line-height:1;
 }
 .marca-texto-sub{
   font-family:'Montserrat',sans-serif;
@@ -132,7 +134,7 @@ button:disabled{opacity:.55;cursor:default;}
   margin-top:4px;
 }
 .marca-texto--pequena .marca-texto-principal{font-size:34px;}
-.marca-texto--pequena .marca-texto-sub{font-size:11px;margin-top:2px;}
+.marca-texto--pequena .marca-texto-sub{font-size:11px;margin-top:3px;}
 .marca-logo{display:block;margin:0 auto;object-fit:contain;}
 .marca-logo--grande{width:150px;height:150px;}
 .marca-logo--pequena{width:72px;height:72px;}
@@ -318,3 +320,32 @@ button:disabled{opacity:.55;cursor:default;}
 }
 .modal-acciones{display:flex;gap:10px;}
 .modal-acciones .boton{flex:1;padding-left:10px;padding-right:10px;font-size:13px;white-space:nowrap;}
+
+/* ============================================================
+   Computador (≥ 960px)
+   ============================================================ */
+@media (min-width:960px){
+  :root{--ancho-contenido:880px;}
+  .solo-movil{display:none;}
+}
+
+/* ---- Franja de modo prueba (PRUEBA en config.js) ---- */
+.banner-prueba{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:200;
+  padding:calc(6px + env(safe-area-inset-top)) 12px 6px;
+  background:#FFD23F;
+  color:#1a1300;
+  font-size:12px;
+  font-weight:700;
+  text-align:center;
+  line-height:1.3;
+  pointer-events:none;
+}
+/* Corre el contenido para que la franja no tape nada */
+.modo-prueba .acceso{padding-top:calc(64px + env(safe-area-inset-top));}
+.modo-prueba .app-scroll{padding-top:calc(52px + env(safe-area-inset-top));}
+.modo-prueba .app-lateral{padding-top:60px;}

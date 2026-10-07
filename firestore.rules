@@ -40,7 +40,7 @@ service cloud.firestore {
     }
 
     function rolValido(rol) {
-      return rol in ['dropshipper', 'proveedor'];
+      return rol in ['dropshipper', 'proveedor', 'marca'];
     }
 
     function telefonoValido(telefono) {
@@ -124,7 +124,7 @@ service cloud.firestore {
       allow write: if esAdmin();
     }
 
-    // Un reto por rol: retos/dropshipper y retos/proveedor.
+    // Un reto por rol: retos/dropshipper, retos/proveedor y retos/marca.
     // Cada quien solo ve el de su rol, y solo desde la fecha visibleDesde.
     match /retos/{rol} {
       allow get: if esAdmin()

@@ -45,14 +45,27 @@ scripts/                    ← carga de datos y permisos de jurado (Cloud Shell
 
 ## Antes de publicar
 
-1. **Reglas de Firestore:** esta versión agrega el campo `aceptaPolitica` al
-   perfil. Copia `firestore.rules` y vuelve a publicarlo en Firestore → Reglas.
-   Sin este paso, el registro falla.
+1. **Reglas de Firestore:** cada vez que cambie `firestore.rules`, cópialo y
+   vuelve a publicarlo en Firestore → Reglas. La versión actual exige
+   `aceptaPolitica` en el perfil y acepta los roles `dropshipper`,
+   `proveedor` y `marca`.
 2. **Verifica `firebaseConfig`** en `src/config.js` contra la consola (se
    transcribió de una captura).
 3. **Dominios autorizados** (Authentication → Configuración): agrega el
    dominio de Vercel y el dominio final.
 4. Sin `dist/` ni `node_modules/` en los zips.
+
+## Agregar un rol nuevo
+
+El rol debe existir en tres lugares con el mismo `id`:
+`ROLES` en `src/config.js`, `rolValido()` en `firestore.rules` y un
+documento `retos/<id>` en Firestore.
+
+## Agregar un país
+
+Agrégalo en `PAISES` (`src/config.js`) y pon su bandera en
+`public/media/banderas/<id en minúscula>.svg`, tomada del paquete
+[flag-icons](https://github.com/lipis/flag-icons) (carpeta `flags/4x3`).
 
 ## Página de restablecer contraseña (opcional)
 
