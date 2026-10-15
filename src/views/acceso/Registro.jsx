@@ -72,7 +72,8 @@ export default function Registro({ onRegistrar, onVolver }) {
       {!navegadorInterno && (
         <>
           <button type="button" className="boton boton--google" onClick={handleGoogle}>
-            <span className="boton-google-g" aria-hidden="true">G</span>
+            {/* <span className="boton-google-g" aria-hidden="true">G</span> */}
+            <img className="boton-google-icono" src="/media/Google.svg" alt="" />
             Registrarme con Google
           </button>
           <div className="separador"><span>o con tu correo</span></div>

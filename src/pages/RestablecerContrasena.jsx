@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { verifyPasswordResetCode, confirmPasswordReset } from 'firebase/auth';
 import { getFirebaseAuth } from '../lib/auth.js';
-import { IMAGEN_FONDO } from '../config.js';
 import Marca from '../components/Marca.jsx';
 import CampoPassword from '../components/CampoPassword.jsx';
 import '../styles/ingreso.css';
@@ -25,10 +24,11 @@ export default function RestablecerContrasena() {
   const [passwordConfirmacion, setPasswordConfirmacion] = useState('');
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    document.body.style.backgroundImage = `url("${IMAGEN_FONDO}")`;
-    return () => { document.body.style.backgroundImage = ''; };
-  }, []);
+  // El fondo ahora lo pone el CSS (body::before), con versión de celular y de computador.
+  // useEffect(() => {
+  //   document.body.style.backgroundImage = `url("${IMAGEN_FONDO}")`;
+  //   return () => { document.body.style.backgroundImage = ''; };
+  // }, []);
 
   useEffect(() => {
     if (!oobCode) {

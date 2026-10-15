@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { IMAGEN_FONDO } from '../config.js';
 import {
   onCambioSesion, registrarConCorreo, cerrarSesion, esCuentaAdmin,
 } from '../lib/auth.js';
@@ -60,10 +59,11 @@ function IngresoContenido() {
   // perfil": el registro mismo se encarga de guardar el perfil.
   const registrandoRef = useRef(false);
 
-  useEffect(() => {
-    document.body.style.backgroundImage = `url("${IMAGEN_FONDO}")`;
-    return () => { document.body.style.backgroundImage = ''; };
-  }, []);
+  // El fondo ahora lo pone el CSS (body::before), con versión de celular y de computador.
+  // useEffect(() => {
+  //   document.body.style.backgroundImage = `url("${IMAGEN_FONDO}")`;
+  //   return () => { document.body.style.backgroundImage = ''; };
+  // }, []);
 
   const cargarPerfil = useCallback(async (u) => {
     setPerfil(undefined);

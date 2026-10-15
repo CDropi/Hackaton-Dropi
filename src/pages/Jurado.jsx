@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ROLES, IMAGEN_FONDO } from '../config.js';
+import { ROLES } from '../config.js';
 import {
   onCambioSesion, iniciarSesionConCorreo, cerrarSesion, esCuentaAdmin, mensajeDeError,
 } from '../lib/auth.js';
@@ -19,10 +19,11 @@ export default function Jurado() {
   const [user, setUser] = useState(undefined);
   const [esAdmin, setEsAdmin] = useState(undefined);
 
-  useEffect(() => {
-    document.body.style.backgroundImage = `url("${IMAGEN_FONDO}")`;
-    return () => { document.body.style.backgroundImage = ''; };
-  }, []);
+  // El fondo ahora lo pone el CSS (body::before), con versión de celular y de computador.
+  // useEffect(() => {
+  //   document.body.style.backgroundImage = `url("${IMAGEN_FONDO}")`;
+  //   return () => { document.body.style.backgroundImage = ''; };
+  // }, []);
 
   useEffect(() => {
     return onCambioSesion(async (u) => {

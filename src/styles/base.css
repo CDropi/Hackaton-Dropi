@@ -26,7 +26,43 @@
 }
 
 :root{
-  --bg:#0B0F1A;
+  /* ---- Paleta de la Hackatón ---- */
+  --gris-oscuro:#28201d;
+  --claude:#de7356;
+  --naranja:#ff6102;          /* naranja Dropi */
+  --naranja-hover:#e65600;    /* el mismo naranja un poco más oscuro, para :hover */
+
+  --bg:var(--gris-oscuro);
+  --paper:#FBF9F3;
+  /* Acentos de texto (títulos de sección, rol, enlaces): color Claude */
+  --naranja-claro:var(--claude);
+  --texto-suave:rgba(255,255,255,.74);
+  --texto-tenue:rgba(255,255,255,.55);
+  --linea:rgba(255,255,255,.16);
+  /* --vidrio-oscuro:rgba(40,32,29,.78); */
+  --vidrio-oscuro:var(--gris-oscuro);  /* tarjetas: gris oscuro sólido, sin desenfoque */
+  /* Campos y opciones de formulario: un gris un poco más claro y sólido, para
+     que se distingan dentro de las tarjetas ahora que no tienen borde. */
+  --gris-campo:#3a2f2b;
+  --gris-campo-hover:#463a35;
+  --verde:#4CD47A;
+  --rojo:#FF8A80;
+  /* Redondeos: esquinas más rectas, a tono con el estilo pixelado del logo y los fondos.
+     Antes: tarjetas 18px y botones/etiquetas totalmente redondos (999px). */
+  /* Esquinas en punta en todo. Antes: 10px / 6px / 4px. */
+  --radio:0;             /* tarjetas, paneles, listas */
+  --radio-control:0;     /* botones, campos, pestañas */
+  --radio-chico:0;       /* etiquetas pequeñas */
+
+  /* Bisel recto en la esquina superior derecha de las tarjetas gris oscuro.
+     Cambiar --bisel ajusta el tamaño del corte en toda la app (0 lo quita). */
+  --bisel:18px;
+  --forma-bisel:polygon(0 0, calc(100% - var(--bisel)) 0, 100% var(--bisel), 100% 100%, 0 100%);
+  --ancho-contenido:520px;
+}
+/* Paleta anterior:
+:root{
+  --bg:#332520;
   --paper:#FBF9F3;
   --naranja:#ED6F2D;
   --naranja-profundo:#8D2E00;
@@ -41,6 +77,7 @@
   --radio:18px;
   --ancho-contenido:520px;
 }
+*/
 
 *{box-sizing:border-box;}
 html,body{margin:0;padding:0;overflow-x:hidden;}
@@ -51,11 +88,28 @@ body{
   font-weight:300;
   color:var(--paper);
   background-color:var(--bg);
-  background-size:cover;
-  background-position:center;
-  background-repeat:no-repeat;
-  background-attachment:fixed;
   -webkit-font-smoothing:antialiased;
+}
+
+/* Fondo de la Hackatón en una capa fija detrás de todo.
+   Se usa un ::before fijo en vez de background-attachment:fixed, porque
+   iPhone ignora ese "fixed" y estira la imagen al alto de toda la página
+   (pasaba en el registro, que es largo). Las variables las define main.jsx
+   desde FONDOS en config.js. */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  background-color:var(--bg);
+  background-image:var(--fondo-movil);
+  background-size:cover;
+  background-position:top center;
+  background-repeat:no-repeat;
+  pointer-events:none;
+}
+@media (min-width:960px){
+  body::before{background-image:var(--fondo-escritorio);}
 }
 strong,b{font-weight:700;}
 a{color:inherit;}
@@ -135,9 +189,11 @@ button:disabled{opacity:.55;cursor:default;}
 }
 .marca-texto--pequena .marca-texto-principal{font-size:34px;}
 .marca-texto--pequena .marca-texto-sub{font-size:11px;margin-top:3px;}
-.marca-logo{display:block;margin:0 auto;object-fit:contain;}
-.marca-logo--grande{width:150px;height:150px;}
-.marca-logo--pequena{width:72px;height:72px;}
+/* El logo es horizontal (proporción 2,4 : 1): se define el ancho y el alto
+   sale solo. */
+.marca-logo{display:block;margin:0 auto;height:auto;max-width:100%;}
+.marca-logo--grande{width:280px;}
+.marca-logo--pequena{width:170px;}
 
 /* ---- Campos de formulario ---- */
 .campo-input{
@@ -145,19 +201,20 @@ button:disabled{opacity:.55;cursor:default;}
   width:100%;
   padding:12px 18px;
   margin:0 0 12px;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,.28);
-  background:rgba(10,8,6,.38);
-  backdrop-filter:blur(6px);
+  border-radius:var(--radio-control);
+  /* border:1px solid rgba(255,255,255,.28); */
+  border:none;
+  background:var(--gris-campo);
   color:var(--paper);
   font:inherit;
   font-size:15px;
   text-align:center;
   outline:none;
-  transition:border-color .15s ease, background .15s ease;
+  transition:box-shadow .15s ease, background .15s ease;
 }
 .campo-input::placeholder{color:rgba(255,255,255,.5);font-size:13px;}
-.campo-input:focus{border-color:var(--naranja-claro);background:rgba(10,8,6,.55);}
+/* Sin borde: el foco se marca con una línea interior en color Claude */
+.campo-input:focus{box-shadow:inset 0 0 0 2px var(--claude);background:var(--gris-campo-hover);}
 .campo-input--izquierda{text-align:left;}
 
 .campo-password{position:relative;}
@@ -183,7 +240,7 @@ button:disabled{opacity:.55;cursor:default;}
   gap:8px;
   width:100%;
   padding:12px 22px;
-  border-radius:999px;
+  border-radius:var(--radio-control);
   font-family:'Montserrat',sans-serif;
   font-weight:700;
   font-size:14px;
@@ -194,30 +251,34 @@ button:disabled{opacity:.55;cursor:default;}
 }
 .boton:active:not(:disabled){transform:scale(.98);}
 .boton--primario{
-  background:linear-gradient(to top, var(--naranja) 0%, var(--naranja-profundo) 100%);
+  /* background:linear-gradient(to top, var(--naranja) 0%, var(--naranja-profundo) 100%); */
+  background:var(--naranja);
   border:1px solid var(--naranja);
   color:#fff;
 }
-.boton--primario:hover:not(:disabled){filter:brightness(1.12);}
+.boton--primario:hover:not(:disabled){background:var(--naranja-hover);border-color:var(--naranja-hover);}
 .boton--secundario{
-  background:var(--vidrio);
-  border:1px solid rgba(255,255,255,.3);
-  backdrop-filter:blur(6px) saturate(140%);
+  /* background:var(--vidrio); */
+  background:var(--gris-campo);
+  border:1px solid var(--gris-campo);
   color:#fff;
 }
-.boton--secundario:hover:not(:disabled){filter:brightness(1.25);}
+.boton--secundario:hover:not(:disabled){background:var(--gris-campo-hover);border-color:var(--gris-campo-hover);}
 .boton--google{
   background:#fff;
   color:#1f1f1f;
   border:1px solid #fff;
 }
 .boton--google:hover:not(:disabled){filter:brightness(.94);}
+/* Antes: una "G" de texto en azul.
 .boton-google-g{
   font-family:Arial,Helvetica,sans-serif;
   font-weight:700;
   font-size:17px;
   color:#4285F4;
 }
+*/
+.boton-google-icono{width:18px;height:18px;flex-shrink:0;}
 .boton--compacto{width:auto;padding:9px 18px;font-size:13px;}
 
 .enlace-texto{
@@ -236,11 +297,11 @@ button:disabled{opacity:.55;cursor:default;}
   line-height:1.45;
   margin:0 0 14px;
   padding:10px 14px;
-  border-radius:12px;
+  border-radius:var(--radio-control);
   text-align:left;
 }
-.mensaje--error{background:rgba(120,20,10,.55);border:1px solid rgba(255,138,128,.5);}
-.mensaje--aviso{background:var(--vidrio-oscuro);border:1px solid var(--linea);}
+.mensaje--error{background:#5c1f14;}
+.mensaje--aviso{background:var(--gris-oscuro);}
 
 .estado-vacio{
   text-align:center;
@@ -248,8 +309,7 @@ button:disabled{opacity:.55;cursor:default;}
   font-size:14px;
   line-height:1.6;
   padding:28px 20px;
-  background:var(--vidrio-oscuro);
-  border:1px dashed rgba(255,255,255,.3);
+  background:var(--gris-oscuro);
   border-radius:var(--radio);
 }
 .estado-vacio p{margin:0 0 12px;}
@@ -260,9 +320,9 @@ button:disabled{opacity:.55;cursor:default;}
   display:flex;
   gap:4px;
   padding:4px;
-  background:linear-gradient(180deg, rgba(201,106,58,.55), rgba(156,74,31,.55));
-  border:1px solid rgba(228,228,228,.2);
-  border-radius:16px;
+  /* background:linear-gradient(180deg, rgba(201,106,58,.55), rgba(156,74,31,.55)); */
+  background:var(--gris-oscuro);
+  border-radius:var(--radio-control);
 }
 .tab-dia{
   flex:1;
@@ -271,13 +331,13 @@ button:disabled{opacity:.55;cursor:default;}
   align-items:center;
   gap:2px;
   padding:10px 6px;
-  border-radius:12px;
+  border-radius:var(--radio-chico);
   color:rgba(255,255,255,.88);
   transition:background .15s ease, color .15s ease;
 }
 .tab-dia:hover{background:rgba(255,255,255,.08);}
 .tab-dia--activo,
-.tab-dia--activo:hover{background:rgba(239,225,199,.85);color:#5b2e12;}
+.tab-dia--activo:hover{background:var(--naranja);color:#fff;}
 .tab-dia-titulo{font-weight:700;font-size:14px;}
 .tab-dia-fecha{font-size:11.5px;}
 
@@ -290,16 +350,15 @@ button:disabled{opacity:.55;cursor:default;}
   align-items:center;
   justify-content:center;
   padding:20px;
-  background:rgba(8,6,4,.78);
+  background:rgba(28,22,20,.85);
 }
 .modal-caja{
   width:100%;
   max-width:400px;
   padding:26px 22px;
   border-radius:var(--radio);
-  background:#1b130e;
-  border:1px solid rgba(237,111,45,.45);
-  box-shadow:0 30px 60px -20px rgba(0,0,0,.7);
+  background:var(--gris-oscuro);
+  /* box-shadow:0 30px 60px -20px rgba(0,0,0,.7);  el bisel (clip-path) recortaría la sombra */
 }
 .modal-titulo{
   font-family:'Tusker',sans-serif;
@@ -315,7 +374,7 @@ button:disabled{opacity:.55;cursor:default;}
   word-break:break-all;
   padding:10px 12px;
   margin:0 0 18px;
-  border-radius:10px;
+  border-radius:var(--radio-chico);
   background:rgba(255,255,255,.07);
 }
 .modal-acciones{display:flex;gap:10px;}
@@ -349,3 +408,31 @@ button:disabled{opacity:.55;cursor:default;}
 .modo-prueba .acceso{padding-top:calc(64px + env(safe-area-inset-top));}
 .modo-prueba .app-scroll{padding-top:calc(52px + env(safe-area-inset-top));}
 .modo-prueba .app-lateral{padding-top:60px;}
+
+/* ---- Bisel de las tarjetas gris oscuro ----
+   clip-path recorta la esquina superior derecha. Ojo: también recorta lo que
+   sobresalga de la tarjeta (sombras, contornos de foco hacia afuera), por
+   eso estas tarjetas no llevan box-shadow. */
+.estado-vacio,
+.modal-caja,
+.charla,
+.reto-seccion,
+.reto-bloqueado,
+.entrega,
+.perfil-datos,
+.perfil-entrega,
+.perfil-enlace,
+.jurado-entrega{
+  clip-path:var(--forma-bisel);
+}
+/* El enlace de Perfil es una tarjeta clicable: su contorno de foco va hacia
+   adentro para que el bisel no lo corte. */
+.perfil-enlace:focus-visible{outline-offset:-3px;}
+@media (min-width:960px){
+  /* En celular la tarjeta de inicio de sesión no tiene fondo: el bisel solo
+     aplica en computador. Y la cabecera de Perfil solo es tarjeta ahí. */
+  .acceso--dividido .acceso-card,
+  .perfil-cabecera{
+    clip-path:var(--forma-bisel);
+  }
+}

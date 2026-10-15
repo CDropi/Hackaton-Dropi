@@ -14,7 +14,11 @@ export const EVENTO = {
   nombre: "Hackatón Dropi",
   fechas: "Del 19 al 25 de octubre de 2026",
   // Textos del panel izquierdo de inicio de sesión y registro (solo computador)
-  descripcion: "Una semana para resolver un caso real de tu negocio creando un Artifact con Claude.",
+  // El \n marca dónde se parte la línea. En computador el ancho del logo se
+  // iguala a la línea de texto más larga del panel, así que estos saltos
+  // definen qué tan ancho se ve el logo.
+  // descripcion: "Una semana para resolver un caso real de tu negocio creando un Artifact con Claude.",
+  descripcion: "Una semana para resolver un caso real de\ntu negocio creando un Artifact con Claude.",
   puntos: [
     { titulo: "Bootcamp en vivo", texto: "Charlas por Google Meet para arrancar con todo." },
     { titulo: "Un reto por perfil", texto: "Un caso distinto para cada tipo de negocio." },
@@ -22,12 +26,17 @@ export const EVENTO = {
   ],
 };
 
-// 3) Logo de la app. Cuando lo tengan, colóquenlo
-//    en /public/media y pongan la ruta, ej: "/media/Logo_Hackaton.png"
-export const LOGO_APP = null;
+// 3) Logo de la app (en /public/media). Si se pone en null, la app dibuja
+//    el nombre en texto.
+export const LOGO_APP = "/media/Logo-Hackaton.png";
 
-// 4) Fondo de las pantallas
-export const IMAGEN_FONDO = "/media/Fondo_Login.png";
+// 4) Fondos de las pantallas: uno vertical para celular y uno horizontal
+//    para computador (desde 960 px de ancho, el mismo corte del diseño).
+// export const IMAGEN_FONDO = "/media/Fondo_Login.png";
+export const FONDOS = {
+  movil: "/media/Fondo-Hackaton_Mobile.png",
+  escritorio: "/media/Fondo-Hackaton_Desktop.png",
+};
 
 // 5) Política de tratamiento de datos (se acepta al registrarse y se
 //    consulta desde Perfil)

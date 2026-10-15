@@ -112,7 +112,8 @@ export default function Login({ onIrARegistro }) {
         </p>
       ) : (
         <button type="button" className="boton boton--google" onClick={handleGoogle}>
-          <span className="boton-google-g" aria-hidden="true">G</span>
+          {/* <span className="boton-google-g" aria-hidden="true">G</span> */}
+          <img className="boton-google-icono" src="/media/Google.svg" alt="" />
           Continuar con Google
         </button>
       )}

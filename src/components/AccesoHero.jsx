@@ -1,5 +1,6 @@
 import { EVENTO } from '../config.js';
 import Marca from './Marca.jsx';
+import { conNegrillas } from '../utils/texto.jsx';
 
 // Panel izquierdo de las pantallas de acceso. Solo se muestra en
 // computador (ver .acceso-hero en ingreso.css); en celular la tarjeta del
@@ -9,7 +10,8 @@ export default function AccesoHero() {
     <aside className="acceso-hero">
       <Marca />
       <p className="acceso-hero-fechas">{EVENTO.fechas}</p>
-      <p className="acceso-hero-descripcion">{EVENTO.descripcion}</p>
+      {/* conNegrillas convierte el \n de config.js en salto de línea */}
+      <p className="acceso-hero-descripcion">{conNegrillas(EVENTO.descripcion)}</p>
       <ul className="acceso-hero-puntos">
         {EVENTO.puntos.map((punto, i) => (
           <li key={punto.titulo} className="acceso-hero-punto">

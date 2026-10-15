@@ -16,13 +16,11 @@
   gap:14px;
   padding:16px;
   border-radius:var(--radio);
-  background:var(--vidrio-oscuro);
-  border:1px solid var(--linea);
-  backdrop-filter:blur(8px);
+  background:var(--gris-oscuro);
 }
 .charla--en-vivo{
-  border-color:var(--naranja);
-  box-shadow:0 0 0 1px var(--naranja), 0 18px 40px -20px rgba(237,111,45,.8);
+  /* Sin borde: la charla en vivo se distingue por la etiqueta "En vivo" y el
+     botón naranja. Antes: borde y resplandor naranja. */
 }
 .charla--finalizada{opacity:.62;}
 
@@ -61,7 +59,7 @@
   font-size:11.5px;
   font-weight:700;
   padding:3px 10px;
-  border-radius:999px;
+  border-radius:var(--radio-chico);
   background:var(--naranja);
   color:#fff;
 }

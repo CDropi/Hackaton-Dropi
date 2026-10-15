@@ -5,6 +5,13 @@ import './styles/base.css';
 import Ingreso from './pages/Ingreso.jsx';
 import Jurado from './pages/Jurado.jsx';
 import RestablecerContrasena from './pages/RestablecerContrasena.jsx';
+import { FONDOS } from './config.js';
+
+// Los fondos se pasan al CSS como variables, para que el CSS elija el de
+// celular o el de computador según el ancho (ver body::before en base.css).
+// Antes cada página ponía el fondo en document.body con un useEffect.
+document.documentElement.style.setProperty('--fondo-movil', `url("${FONDOS.movil}")`);
+document.documentElement.style.setProperty('--fondo-escritorio', `url("${FONDOS.escritorio}")`);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
