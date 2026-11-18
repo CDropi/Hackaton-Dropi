@@ -1,0 +1,571 @@
+/* ============================================================
+   ingreso.css — pantallas de acceso (login, registro, completar
+   perfil) y el armazón de la app del participante (scroll + menú).
+   ============================================================ */
+
+/* ---- Pantallas de acceso ---- */
+.acceso{
+  min-height:100vh;
+  min-height:100dvh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:calc(32px + env(safe-area-inset-top)) 20px calc(32px + env(safe-area-inset-bottom));
+}
+.acceso-card{
+  width:100%;
+  max-width:380px;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+}
+.acceso-card form{display:flex;flex-direction:column;}
+.acceso-card--registro{max-width:420px;}
+.acceso-barra{display:flex;margin-bottom:6px;}
+.acceso-fechas{
+  font-size:13px;
+  /* color:var(--texto-suave); */
+  color:#fff;
+  font-weight:700;
+  /* text-shadow:0 1px 10px rgba(40,32,29,.9);  sin sombras */
+  margin:10px 0 0;
+}
+.acceso-titulo{
+  font-family:'Tusker',sans-serif;
+  font-weight:700;
+  font-size:40px;
+  line-height:1.05;
+  text-transform:uppercase;
+  letter-spacing:.03em;
+  margin:28px 0 20px;
+}
+.acceso-texto{
+  font-size:14px;
+  line-height:1.55;
+  color:var(--texto-suave);
+  margin:-6px 0 20px;
+}
+.acceso-texto strong{color:#fff;}
+.acceso-pie{font-size:13px;margin:22px 0 0;color:var(--texto-suave);}
+
+.separador{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:18px 0;
+  font-size:12px;
+  color:var(--texto-tenue);
+}
+.separador::before,
+.separador::after{content:"";flex:1;height:1px;background:var(--linea);}
+
+/* ---- Selector de rol ----
+   Una tarjeta por fila: con tres roles, tres columnas quedaban demasiado
+   angostas en celular. */
+.selector-rol{
+  border:none;
+  padding:0;
+  margin:6px 0 14px;
+  text-align:left;
+  min-width:0;
+}
+.selector-rol-titulo{font-weight:700;font-size:14px;margin-bottom:10px;padding:0;}
+.selector-rol-opciones{display:flex;flex-direction:column;gap:8px;}
+.selector-rol-opcion{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 14px;
+  border-radius:var(--radio-control);
+  border:none;
+  background:var(--gris-campo);
+  cursor:pointer;
+  transition:background .15s ease;
+}
+.selector-rol-opcion:hover{background:var(--gris-campo-hover);}
+/* .selector-rol-opcion:focus-within{...}  se veía como un borde al hacer clic */
+/* Contorno solo al navegar con teclado */
+.selector-rol-opcion:has(input:focus-visible){outline:2px solid var(--naranja-claro);outline-offset:2px;}
+.selector-rol-opcion--activa,
+.selector-rol-opcion--activa:hover{
+  border-color:var(--naranja);
+  /* background:linear-gradient(to right, rgba(237,111,45,.6), rgba(141,46,0,.55)); */
+  background:var(--naranja);
+}
+.selector-rol-radio{
+  flex-shrink:0;
+  width:18px;height:18px;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,.6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.selector-rol-opcion--activa .selector-rol-radio{border-color:#fff;}
+.selector-rol-opcion--activa .selector-rol-radio::after{
+  content:"";
+  width:8px;height:8px;
+  border-radius:50%;
+  background:#fff;
+}
+.selector-rol-textos{display:flex;flex-direction:column;gap:3px;min-width:0;}
+.selector-rol-nombre{
+  font-family:'Tusker',sans-serif;
+  font-weight:700;
+  font-size:20px;
+  text-transform:uppercase;
+  letter-spacing:.02em;
+  line-height:1;
+}
+.selector-rol-descripcion{font-size:12px;line-height:1.4;color:var(--texto-suave);}
+.selector-rol-opcion--activa .selector-rol-descripcion{color:#fff;}
+.selector-rol-nota{font-size:11.5px;color:var(--texto-tenue);margin:8px 0 0;line-height:1.4;}
+
+/* ---- Celular con indicativo y bandera ---- */
+.campo-celular{display:flex;gap:8px;}
+.campo-celular-numero{flex:1;min-width:0;text-align:left;}
+
+.selector-pais{position:relative;flex:0 0 auto;}
+.selector-pais-boton{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  width:auto;
+  padding-left:12px;
+  padding-right:12px;
+  text-align:left;
+  cursor:pointer;
+}
+.selector-pais-bandera{
+  width:22px;
+  height:16px;
+  flex-shrink:0;
+  border-radius:0;
+  object-fit:cover;
+  /* box-shadow:0 0 0 1px rgba(255,255,255,.18);  sin sombras */
+}
+.selector-pais-flecha{
+  width:9px;height:9px;
+  opacity:.7;
+  transform:rotate(90deg);
+  transition:transform .15s ease;
+}
+.selector-pais-boton[aria-expanded="true"] .selector-pais-flecha{transform:rotate(-90deg);}
+
+.selector-pais-lista{
+  position:absolute;
+  z-index:30;
+  top:calc(100% - 6px);
+  left:0;
+  width:260px;
+  max-height:280px;
+  overflow-y:auto;
+  margin:0;
+  padding:6px;
+  list-style:none;
+  text-align:left;
+  border-radius:var(--radio);
+  background:var(--gris-oscuro);
+  /* box-shadow:0 24px 48px -16px rgba(0,0,0,.75);  sin sombras */
+}
+.selector-pais-opcion{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:9px 10px;
+  border-radius:var(--radio-chico);
+  font-size:14px;
+  cursor:pointer;
+}
+.selector-pais-opcion--resaltada{background:rgba(255,255,255,.09);}
+.selector-pais-opcion--elegida{font-weight:700;}
+.selector-pais-opcion--elegida .selector-pais-indicativo{color:var(--naranja-claro);}
+.selector-pais-nombre{flex:1;min-width:0;}
+.selector-pais-indicativo{font-size:13px;color:var(--texto-tenue);}
+
+/* ---- Autorización de datos ---- */
+.casilla-politica{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  text-align:left;
+  font-size:12.5px;
+  line-height:1.45;
+  color:var(--texto-suave);
+  margin:2px 0 16px;
+  cursor:pointer;
+}
+.casilla-politica input{
+  flex-shrink:0;
+  width:18px;height:18px;
+  margin:1px 0 0;
+  accent-color:var(--naranja);
+}
+.casilla-politica a{color:#fff;font-weight:700;}
+
+/* ============================================================
+   App del participante: área con scroll + menú inferior fijo
+   ============================================================ */
+.app-shell{
+  position:fixed;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+}
+.app-scroll{
+  flex:1;
+  min-height:0;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:calc(20px + env(safe-area-inset-top)) 18px 90px;
+}
+.app-scroll > *{width:100%;max-width:var(--ancho-contenido);}
+.app-marca{margin-bottom:18px;}
+
+/* ---- Encabezado de cada pestaña ---- */
+.pantalla-encabezado{text-align:center;margin-bottom:20px;}
+.pantalla-saludo{
+  font-family:'Tusker',sans-serif;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.03em;
+  font-size:32px;
+  line-height:1.05;
+  margin:0 0 10px;
+}
+.pantalla-descripcion{
+  font-size:14px;
+  line-height:1.55;
+  /* color:var(--texto-suave);  se perdía sobre los cuadros naranja del fondo de celular */
+  color:#fff;
+  /* text-shadow:0 1px 10px rgba(40,32,29,.9);  sin sombras */
+  margin:0 auto;
+  max-width:34ch;
+}
+
+/* ---- Menú inferior (heredado de ExpoWinners) ---- */
+.nav-wrapper{
+  position:relative;
+  flex:0 0 auto;
+  background:var(--gris-oscuro);
+  padding-bottom:env(safe-area-inset-bottom);
+  z-index:20;
+}
+@property --nav-hole-x{
+  syntax:'<percentage>';
+  inherits:false;
+  initial-value:0%;
+}
+.bottom-nav{
+  --nav-hole-x:0%;
+  position:relative;
+  height:64px;
+  margin:0;
+  background:var(--gris-oscuro);
+  border-radius:0;
+  overflow:visible;
+  /* Capa 1: la barra completa, siempre 100% visible.
+     Capa 2: la MISMA forma de hueco fija (no se recalcula nunca),
+     que solo se desliza de posición con mask-position — una
+     animación nativa y liviana, a diferencia de intentar "morfear"
+     un clip-path entre dos formas distintas (eso es lo que fallaba
+     en celulares). El modo "subtract" hace que la capa 2 recorte
+     un hueco real en la capa 1, sin ocultar el resto de la barra. */
+  -webkit-mask-image:
+    linear-gradient(#000,#000),
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20130%2064'%3E%3Cpath%20d%3D'M%200.00%200.00%20L%2019.75%200.00%20L%2021.71%200.12%20L%2023.64%200.48%20L%2025.52%201.08%20L%2027.31%201.90%20L%2028.98%202.94%20L%2030.52%204.17%20L%2031.89%205.58%20L%2033.08%207.15%20L%2034.06%208.85%20L%2034.83%2010.67%20L%2038.34%2017.70%20L%2043.46%2023.66%20L%2049.87%2028.20%20L%2057.20%2031.04%20L%2065.00%2032.00%20L%2072.80%2031.04%20L%2080.13%2028.20%20L%2086.54%2023.66%20L%2091.66%2017.70%20L%2095.17%2010.67%20L%2095.94%208.85%20L%2096.92%207.15%20L%2098.11%205.58%20L%2099.48%204.17%20L%20101.02%202.94%20L%20102.69%201.90%20L%20104.48%201.08%20L%20106.36%200.48%20L%20108.29%200.12%20L%20110.25%200.00%20L%20130.00%200.00%20L%20130.00%2064.00%20L%200.00%2064.00%20Z'%20fill%3D'black'%2F%3E%3C%2Fsvg%3E");
+  mask-image:
+    linear-gradient(#000,#000),
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20130%2064'%3E%3Cpath%20d%3D'M%200.00%200.00%20L%2019.75%200.00%20L%2021.71%200.12%20L%2023.64%200.48%20L%2025.52%201.08%20L%2027.31%201.90%20L%2028.98%202.94%20L%2030.52%204.17%20L%2031.89%205.58%20L%2033.08%207.15%20L%2034.06%208.85%20L%2034.83%2010.67%20L%2038.34%2017.70%20L%2043.46%2023.66%20L%2049.87%2028.20%20L%2057.20%2031.04%20L%2065.00%2032.00%20L%2072.80%2031.04%20L%2080.13%2028.20%20L%2086.54%2023.66%20L%2091.66%2017.70%20L%2095.17%2010.67%20L%2095.94%208.85%20L%2096.92%207.15%20L%2098.11%205.58%20L%2099.48%204.17%20L%20101.02%202.94%20L%20102.69%201.90%20L%20104.48%201.08%20L%20106.36%200.48%20L%20108.29%200.12%20L%20110.25%200.00%20L%20130.00%200.00%20L%20130.00%2064.00%20L%200.00%2064.00%20Z'%20fill%3D'black'%2F%3E%3C%2Fsvg%3E");
+  -webkit-mask-size:100% 100%, 33.3334% 100%;
+  mask-size:100% 100%, 33.3334% 100%;
+  -webkit-mask-repeat:no-repeat, no-repeat;
+  mask-repeat:no-repeat, no-repeat;
+  -webkit-mask-position:0 0, var(--nav-hole-x) 0;
+  mask-position:0 0, var(--nav-hole-x) 0;
+  -webkit-mask-composite:source-over, destination-out;
+  mask-composite:add, subtract;
+  transition:--nav-hole-x .48s cubic-bezier(.34,1.56,.64,1);
+}
+.nav-items-row{
+  display:flex;
+  width:100%;
+  height:100%;
+  position:relative;
+  z-index:1;
+}
+.nav-item{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:transparent;
+  border:none;
+  margin:0;
+  padding:18px 4px;
+  color:rgba(255,255,255,.55);
+  cursor:pointer;
+  transition:opacity .2s ease;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-appearance:none;
+  appearance:none;
+  outline:none !important;
+  box-shadow:none !important;
+  user-select:none;
+  -webkit-user-select:none;
+}
+.nav-item:hover,
+.nav-item:focus,
+.nav-item:focus-visible,
+.nav-item:active{
+  outline:none !important;
+  box-shadow:none !important;
+  background:transparent !important;
+  transform:none !important;
+}
+.nav-item img{width:20px;height:20px;}
+.nav-item.active{opacity:0;}
+
+/* El ícono activo se desliza en tiempo real con transform (nativo,
+   liviano, funciona en cualquier celular), sincronizado con el hueco
+   de arriba que se mueve con la misma duración/curva. */
+.nav-indicator{
+  position:absolute;
+  top:-22px;
+  left:0;
+  width:33.3333%;
+  height:60px;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .48s cubic-bezier(.34,1.56,.64,1);
+  z-index:2;
+  pointer-events:none;
+}
+.nav-indicator-circle{
+  flex-shrink:0;
+  width:60px;height:60px;
+  border-radius:50%;
+  background:var(--naranja);
+  color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  /* box-shadow:0 8px 16px -6px rgba(0,0,0,.5);  sin sombras */
+}
+.nav-indicator-circle img{width:25px;height:25px;}
+
+
+
+
+.nav-item{flex-direction:column;gap:4px;padding:10px 4px;}
+.nav-item-texto{font-size:10.5px;font-weight:700;color:rgba(255,255,255,.7);}
+
+/* ---- Panel de bienvenida (solo computador) ---- */
+.acceso-hero{display:none;}
+.acceso-columna{width:100%;display:flex;justify-content:center;}
+
+/* ---- Barra lateral (solo computador) ---- */
+.app-lateral{display:none;}
+
+/* ============================================================
+   Computador (≥ 960px): la versión de celular no cambia.
+   ============================================================ */
+@media (min-width:960px){
+  /* Acceso: bienvenida a la izquierda, formulario a la derecha */
+  .acceso--dividido{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(380px,440px);
+    gap:72px;
+    align-items:center;
+    max-width:1160px;
+    margin:0 auto;
+    padding:56px 48px;
+  }
+  /* El bloque mide lo mismo que su línea de texto más larga (width:fit-content
+     + líneas sin salto automático), y el logo se estira a ese mismo ancho.
+     Así el borde derecho del logo coincide con el final del texto en
+     cualquier pantalla, y el logo queda centrado sobre el bloque.
+     Antes: ancho fijo de 500px, y el texto partía las líneas antes de ese
+     borde, por eso el logo parecía corrido según el ancho de la pantalla. */
+  .acceso-hero{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    width:fit-content;
+    max-width:100%;
+    justify-self:center;
+  }
+  .acceso-hero .marca-texto{align-items:flex-start;}
+  /* .acceso-hero .marca-logo{width:clamp(380px, 38vw, 560px);margin:0;} */
+  /* .acceso-hero .marca-logo{width:100%;margin:0;} */
+  /* width:0 hace que el logo no empuje el ancho del bloque; min-width:100%
+     lo estira al ancho que define el texto. */
+  .acceso-hero .marca-logo{width:0;min-width:100%;margin:0;}
+  .acceso-hero .marca-texto-principal{font-size:clamp(96px, 10vw, 148px);}
+  .acceso-hero .marca-texto-sub{font-size:20px;margin-top:6px;}
+  .acceso-hero-fechas{
+    font-weight:700;
+    font-size:15px;
+    margin:22px 0 0;
+    padding:6px 14px;
+    border-radius:var(--radio-chico);
+    background:var(--gris-oscuro);
+  }
+  .acceso-hero-descripcion{
+    /* font-size:20px; */
+    font-size:clamp(17px, 1.55vw, 22px);
+    white-space:nowrap;
+    line-height:1.5;
+    /* max-width:30ch; */
+    margin:22px 0 32px;
+    color:rgba(255,255,255,.9);
+  }
+  .acceso-hero-puntos{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  .acceso-hero-punto{display:flex;gap:16px;align-items:flex-start;font-size:15px;line-height:1.45;white-space:nowrap;}
+  .acceso-hero-punto strong{display:block;}
+  .acceso-hero-punto-texto{display:block;color:rgba(255,255,255,.85);font-size:14px;}
+  .acceso-hero-numero{
+    flex-shrink:0;
+    font-family:'Tusker',sans-serif;
+    font-weight:700;
+    font-size:26px;
+    line-height:1;
+    /* color:var(--naranja-claro);  se perdía sobre los cuadros naranja del fondo */
+    color:#fff;
+    min-width:34px;
+  }
+
+  /* El formulario va dentro de un panel para separarlo del fondo */
+  .acceso--dividido .acceso-card{
+    max-width:none;
+    padding:36px 32px;
+    border-radius:var(--radio);
+    background:var(--gris-oscuro);
+    /* box-shadow:0 40px 80px -40px rgba(0,0,0,.8);  sin sombras */
+  }
+  .acceso--dividido .acceso-titulo{margin-top:4px;font-size:44px;}
+
+  /* App del participante: barra lateral + contenido */
+  .app-shell{flex-direction:row;}
+  .nav-wrapper{display:none;}
+  .app-marca{display:none;}
+
+  .app-lateral{
+    display:flex;
+    flex-direction:column;
+    flex:0 0 248px;
+    padding:32px 20px 24px;
+    background:var(--gris-oscuro);
+  }
+  .app-lateral > .marca-texto{align-items:flex-start;padding-left:12px;}
+  .app-lateral > .marca-logo{width:180px;margin:0 0 0 4px;}
+  .app-lateral-nav{display:flex;flex-direction:column;gap:6px;margin-top:40px;}
+  .app-lateral-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 14px;
+    border-radius:var(--radio-control);
+    font-weight:700;
+    font-size:14px;
+    text-align:left;
+    color:rgba(255,255,255,.75);
+    transition:background .15s ease, color .15s ease;
+  }
+  .app-lateral-item:hover{background:rgba(255,255,255,.07);color:#fff;}
+  .app-lateral-item--activo,
+  .app-lateral-item--activo:hover{
+    /* background:linear-gradient(to right, var(--naranja), var(--naranja-profundo)); */
+    background:var(--naranja);
+    color:#fff;
+  }
+  .app-lateral-usuario{
+    margin-top:auto;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    padding:14px;
+    border-radius:var(--radio);
+    background:var(--gris-campo);
+  }
+  .app-lateral-usuario-nombre{font-weight:700;font-size:13.5px;line-height:1.3;}
+  .app-lateral-usuario-rol{font-size:12px;color:var(--naranja-claro);font-weight:700;}
+
+  .app-scroll{padding:48px 48px 64px;}
+  .app-scroll > *{max-width:var(--ancho-contenido);}
+
+  .pantalla-encabezado{text-align:left;margin-bottom:28px;}
+  .pantalla-saludo{font-size:52px;}
+  .pantalla-descripcion{margin:0;max-width:56ch;font-size:15px;}
+}
+
+@media (min-width:960px){
+  .app-lateral-salir{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-top:8px;
+    padding:9px 12px;
+    border-radius:var(--radio-chico);
+    background:var(--gris-oscuro);
+    font-size:13px;
+    font-weight:700;
+    color:rgba(255,255,255,.8);
+    transition:background .15s ease, color .15s ease;
+  }
+  .app-lateral-salir:hover{background:#1c1614;color:#fff;}
+}
+
+/* ---- Cerrar sesión en celular: botón de vidrio fijo (receta de ExpoWinners) ---- */
+.btn-salir-flotante{
+  position:fixed;
+  top:calc(20px + env(safe-area-inset-top));
+  right:20px;
+  z-index:25;
+  width:40px;height:40px;
+  border-radius:var(--radio-control);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(255,255,255,.25);
+  background:linear-gradient(135deg, rgba(255,255,255,.28), rgba(255,255,255,.06));
+  /* Solo la propiedad estándar: Lightning CSS agrega el -webkit- en el build */
+  backdrop-filter:blur(6px) saturate(140%);
+  /* box-shadow:inset 0 1px 1px rgba(255,255,255,.25), inset 0 -1px 4px rgba(0,0,0,.15);  sin sombras */
+}
+.btn-salir-flotante img{
+  width:18px;
+  height:18px;
+  display:block;
+  margin-left:-5px; /* el ícono tiene la flecha corrida; esto lo centra a la vista */
+}
+.btn-salir-flotante:hover img{opacity:.8;}
+/* Con la franja del modo prueba, el botón baja para no quedar tapado */
+.modo-prueba .btn-salir-flotante{top:calc(56px + env(safe-area-inset-top));}
+
+@media (min-width:960px){
+  .btn-salir-flotante{display:none;}
+}
+
+/* Computador angosto (960–1099px): menos margen y separación, para que la
+   línea más larga del panel de bienvenida quepa sin salirse de su columna. */
+@media (min-width:960px) and (max-width:1099px){
+  .acceso--dividido{gap:40px;padding:48px 32px;}
+}
+
+@media (min-width:960px){
+  /* Sombra de la tarjeta de acceso, siguiendo la forma con bisel */
+  /* .acceso--dividido .acceso-columna{filter:drop-shadow(0 30px 40px rgba(0,0,0,.55));}  sin sombras */
+}
+
+/* Aviso de la cuenta de prueba (solo en modo simulado) */
+.acceso-prueba{margin:18px 0 0;text-align:center;}
+.acceso-prueba p{margin:0 0 6px;}
+.acceso-prueba .enlace-texto{margin:0;}

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+  <!-- Hoja con esquina doblada y renglones: términos y condiciones (mismo estilo que Politica.svg) -->
+  <path d="M6.5 2.6h7.6l4.4 4.4v12.6a1.8 1.8 0 0 1-1.8 1.8H6.5a1.8 1.8 0 0 1-1.8-1.8V4.4a1.8 1.8 0 0 1 1.8-1.8Z" fill="#ffffff"/>
+  <path d="M14.1 2.6v4.4h4.4" fill="#0B0F1A" fill-opacity=".25"/>
+  <path d="M8.2 11h7.6M8.2 14.2h7.6M8.2 17.4h4.6" stroke="#0B0F1A" stroke-width="1.9" stroke-linecap="round"/>
+</svg>
