@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { CATEGORIAS, PAISES, URL_POLITICA_DATOS, URL_TERMINOS } from '../../config.js';
 import { fechaHoraEvento } from '../../utils/fechas.js';
 import { entregasAbiertas } from '../../utils/reloj.js';
@@ -65,17 +66,17 @@ export default function PerfilView({ participante, entrega, onIrAlReto }) {
           )}
         </section>
 
-        <a className="perfil-enlace" href={URL_TERMINOS} target="_blank" rel="noopener noreferrer">
+        <Link className="perfil-enlace" to={URL_TERMINOS}>
           <img className="perfil-enlace-icono" src="/media/Terminos.svg" alt="" />
           <span>Términos y condiciones</span>
           <img className="perfil-enlace-flecha" src="/media/Arrow.svg" alt="" />
-        </a>
+        </Link>
 
-        <a className="perfil-enlace" href={URL_POLITICA_DATOS} target="_blank" rel="noopener noreferrer">
+        <Link className="perfil-enlace" to={URL_POLITICA_DATOS}>
           <img className="perfil-enlace-icono" src="/media/Politica.svg" alt="" />
           <span>Política de tratamiento de datos</span>
           <img className="perfil-enlace-flecha" src="/media/Arrow.svg" alt="" />
-        </a>
+        </Link>
       </div>
     </div>
   );

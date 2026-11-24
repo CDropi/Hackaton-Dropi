@@ -1,4 +1,5 @@
 import { CATEGORIAS, PAISES, URL_POLITICA_DATOS, URL_TERMINOS } from '../config.js';
+import { Link } from 'react-router-dom';
 import SelectorPais from './SelectorPais.jsx';
 
 // Piezas del formulario de registro: categoría, celular (WhatsApp) con
@@ -84,9 +85,24 @@ export function CasillaTerminos({ marcada, onCambio }) {
       <span>
         Acepto los{' '}
         {URL_TERMINOS
-          ? <a href={URL_TERMINOS} target="_blank" rel="noopener noreferrer">términos y condiciones</a>
+          ? <Link to={URL_TERMINOS}>términos y condiciones</Link>
           : <strong>términos y condiciones</strong>}{' '}
         de la Hackatón.
+      </span>
+    </label>
+  );
+}
+
+// Casilla OPCIONAL (numeral 6 de los Términos y numeral 4 de la Política):
+// autoriza el envío de información comercial de Dropi. No marcarla no afecta
+// la participación, por eso no se valida en validarRegistro.
+export function CasillaComunicaciones({ marcada, onCambio }) {
+  return (
+    <label className="casilla-politica">
+      <input type="checkbox" checked={marcada} onChange={e => onCambio(e.target.checked)} />
+      <span>
+        Quiero recibir información comercial de Dropi sobre productos, servicios, eventos y programas.{' '}
+        <span className="casilla-opcional">(Opcional)</span>
       </span>
     </label>
   );
@@ -98,7 +114,7 @@ export function CasillaPolitica({ marcada, onCambio }) {
       <input type="checkbox" checked={marcada} onChange={e => onCambio(e.target.checked)} />
       <span>
         Autorizo el tratamiento de mis datos según la{' '}
-        <a href={URL_POLITICA_DATOS} target="_blank" rel="noopener noreferrer">política de tratamiento de datos</a>{' '}
+        <Link to={URL_POLITICA_DATOS}>política de tratamiento de datos</Link>{' '}
         de Dropi.
       </span>
     </label>

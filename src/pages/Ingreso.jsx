@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   obtenerSesion, registrar, salir, obtenerEntregaActual, mensajeDeError,
 } from '../lib/api.js';
@@ -26,6 +27,24 @@ const PESTANA_INICIAL = NAV_ITEMS.findIndex(item => item.key === 'reto');
 // de celular se mantiene NAV_ITEMS, con el Reto en el centro.
 const ORDEN_LATERAL = ['reto', 'cronograma', 'perfil'];
 
+// La pantalla de acceso (?vista=registro) y la pestaña de la app
+// (?seccion=perfil) viven en la URL. Así, al abrir los términos o la política
+// en la misma pestaña y tocar "Volver", la persona regresa a donde estaba.
+// Se conservan los demás parámetros (ej. ?fecha= del modo prueba).
+function useParametro(nombre) {
+  const [params, setParams] = useSearchParams();
+  const valor = params.get(nombre);
+  const cambiar = useCallback((nuevo, { reemplazar = false } = {}) => {
+    setParams(actuales => {
+      const siguientes = new URLSearchParams(actuales);
+      if (nuevo) siguientes.set(nombre, nuevo);
+      else siguientes.delete(nombre);
+      return siguientes;
+    }, { replace: reemplazar });
+  }, [nombre, setParams]);
+  return [valor, cambiar];
+}
+
 // La franja de modo prueba va por fuera para que se vea en todas las
 // pantallas (acceso y app) sin repetirla en cada return.
 export default function Ingreso() {
@@ -42,7 +61,11 @@ export default function Ingreso() {
 function IngresoContenido() {
   // undefined = cargando, null = sin sesión, objeto = participante
   const [participante, setParticipante] = useState(undefined);
-  const [pantallaAcceso, setPantallaAcceso] = useState('login'); // 'login' | 'registro'
+  // const [pantallaAcceso, setPantallaAcceso] = useState('login');
+  const [vista, setVista] = useParametro('vista');
+  const pantallaAcceso = vista === 'registro' ? 'registro' : 'login';
+  const setPantallaAcceso = (p) => setVista(p === 'registro' ? 'registro' : null);
+  const [, setParams] = useSearchParams();
   const [errorSesion, setErrorSesion] = useState('');
 
   const cargarSesion = useCallback(async () => {
@@ -71,7 +94,14 @@ function IngresoContenido() {
       console.error('Error cerrando sesión:', err);
     }
     setParticipante(null);
-    setPantallaAcceso('login');
+    // Un solo cambio de URL: quita la pestaña y la vista (dos cambios
+    // seguidos se pisarían). Conserva ?fecha= del modo prueba.
+    setParams(actuales => {
+      const siguientes = new URLSearchParams(actuales);
+      siguientes.delete('seccion');
+      siguientes.delete('vista');
+      return siguientes;
+    }, { replace: true });
   }
 
   if (errorSesion) {
@@ -112,7 +142,12 @@ function PantallaCarga() {
 // El cronograma y la guía vienen de config.js y data/guia.js, así que lo
 // único que se pide al backend al entrar es la entrega actual.
 function AppParticipante({ participante, onCerrarSesion }) {
-  const [navActivo, setNavActivo] = useState(PESTANA_INICIAL);
+  // const [navActivo, setNavActivo] = useState(PESTANA_INICIAL);
+  const [seccion, setSeccion] = useParametro('seccion');
+  const indiceSeccion = NAV_ITEMS.findIndex(item => item.key === seccion);
+  const navActivo = indiceSeccion >= 0 ? indiceSeccion : PESTANA_INICIAL;
+  // Cambiar de pestaña reemplaza la URL (no llena el historial de "atrás")
+  const setNavActivo = (i) => setSeccion(i === PESTANA_INICIAL ? null : NAV_ITEMS[i].key, { reemplazar: true });
   // undefined = cargando, null = sin entrega, objeto = última versión
   const [entrega, setEntrega] = useState(undefined);
   const [errorEntrega, setErrorEntrega] = useState('');

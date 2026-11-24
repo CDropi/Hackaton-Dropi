@@ -55,13 +55,14 @@ export const FONDOS = {
 
 // 5) Política de tratamiento de datos (se acepta al registrarse y se
 //    consulta desde Perfil)
-export const URL_POLITICA_DATOS = "https://dropi.co/politica-privacidad";
+// Ahora son páginas propias de la app (textos en src/data/politica.js y
+// src/data/terminos.js), ya no la página de Dropi.
+// export const URL_POLITICA_DATOS = "https://dropi.co/politica-privacidad";
+export const URL_POLITICA_DATOS = "/politica-de-datos";
 
 // Términos y condiciones de la Hackatón (se aceptan al registrarse).
-// PENDIENTE: poner el enlace real de los términos (legal). Por ahora apunta
-// a la misma página de la política de datos.
-// export const URL_TERMINOS = "";
-export const URL_TERMINOS = URL_POLITICA_DATOS;
+// export const URL_TERMINOS = URL_POLITICA_DATOS;
+export const URL_TERMINOS = "/terminos-y-condiciones";
 
 // 6) Categorías de la competencia. El `id` es el valor que se envía al
 //    backend y debe coincidir EXACTAMENTE con el contrato de TI:
@@ -123,10 +124,11 @@ export const ADJUNTOS_PERMITIDOS = [".json", ".zip", ".txt", ".md"];
 // Versión de las reglas que se aceptan en la entrega
 export const VERSION_REGLAS = "1.0";
 
-// 7) Países para el indicativo del celular. La bandera se toma de
-//    /public/media/banderas/<id en minúscula>.svg (ej: CO → co.svg).
-//    Si agregan un país nuevo, agreguen también su bandera en esa carpeta
-//    (se descargan del paquete flag-icons, carpeta flags/4x3).
+// 7) Países habilitados (numeral 4 y anexos de los Términos y Condiciones).
+//    El país del participante se determina por el indicativo de su celular,
+//    así que la lista solo puede tener estos 11 países, en el orden de los
+//    Términos. La bandera se toma de /public/media/banderas/<id>.svg.
+//    Antes la lista tenía además España, Portugal y otros países de Europa.
 export const PAISES = [
   { id: "CO", nombre: "Colombia", indicativo: "+57" },
   { id: "MX", nombre: "México", indicativo: "+52" },
@@ -135,22 +137,10 @@ export const PAISES = [
   { id: "PE", nombre: "Perú", indicativo: "+51" },
   { id: "CL", nombre: "Chile", indicativo: "+56" },
   { id: "PY", nombre: "Paraguay", indicativo: "+595" },
-  { id: "VE", nombre: "Venezuela", indicativo: "+58" },
-  { id: "AR", nombre: "Argentina", indicativo: "+54" },
   { id: "GT", nombre: "Guatemala", indicativo: "+502" },
   { id: "CR", nombre: "Costa Rica", indicativo: "+506" },
-  { id: "ES", nombre: "España", indicativo: "+34" },
-  { id: "PT", nombre: "Portugal", indicativo: "+351" },
-  { id: "RO", nombre: "Rumania", indicativo: "+40" },
-  { id: "PL", nombre: "Polonia", indicativo: "+48" },
-  { id: "HU", nombre: "Hungría", indicativo: "+36" },
-  { id: "SI", nombre: "Eslovenia", indicativo: "+386" },
-  { id: "SK", nombre: "Eslovaquia", indicativo: "+421" },
-  // { id: "HR", nombre: "Croacia", indicativo: "+358" },  ← +358 es Finlandia
-  { id: "HR", nombre: "Croacia", indicativo: "+385" },
-  { id: "GR", nombre: "Grecia", indicativo: "+30" },
-  { id: "BG", nombre: "Bulgaria", indicativo: "+359" },
-  { id: "CZ", nombre: "República Checa", indicativo: "+420" }
+  { id: "VE", nombre: "Venezuela", indicativo: "+58" },
+  { id: "AR", nombre: "Argentina", indicativo: "+54" },
 ];
 
 // 10) MODO PRUEBA — para revisar la app como si ya fuera el evento.

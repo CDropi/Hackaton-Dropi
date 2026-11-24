@@ -569,3 +569,6 @@
 .acceso-prueba{margin:18px 0 0;text-align:center;}
 .acceso-prueba p{margin:0 0 6px;}
 .acceso-prueba .enlace-texto{margin:0;}
+
+/* Marca de casilla opcional (comunicaciones comerciales) */
+.casilla-opcional{color:var(--texto-tenue);}

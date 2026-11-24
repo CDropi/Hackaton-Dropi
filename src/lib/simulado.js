@@ -109,7 +109,12 @@ export async function registrar(datos) {
     categoria: datos.categoria,
     registrado_en: ahora().toISOString(),
   };
-  usuarios[correo] = { hash: await hash(datos.password), participante };
+  // El backend guarda las aceptaciones con fecha y versión (numeral 6 de los Términos)
+  usuarios[correo] = {
+    hash: await hash(datos.password),
+    participante,
+    aceptaciones: { ...datos.aceptaciones, aceptado_en: ahora().toISOString() },
+  };
   escribir(CLAVES.usuarios, usuarios);
   escribir(CLAVES.sesion, participante.id_participante);
   return participante;

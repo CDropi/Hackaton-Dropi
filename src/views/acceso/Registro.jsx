@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { mensajeDeError } from '../../lib/api.js';
 import { FECHAS } from '../../config.js';
 import { estadoRegistro, desdeColombia } from '../../utils/reloj.js';
@@ -7,31 +7,52 @@ import Marca from '../../components/Marca.jsx';
 import CampoPassword from '../../components/CampoPassword.jsx';
 import BotonRegresar from '../../components/BotonRegresar.jsx';
 import {
-  SelectorCategoria, CampoCelular, CampoCedula, CasillaTerminos, CasillaPolitica,
+  SelectorCategoria, CampoCelular, CampoCedula, CasillaTerminos, CasillaPolitica, CasillaComunicaciones,
   armarWhatsapp, normalizarCedula, validarRegistro,
 } from '../../components/CamposPerfil.jsx';
+
+// Lo escrito en el formulario se guarda en la pestaña (sessionStorage) para
+// no perderlo si la persona abre los términos o la política y vuelve.
+// Las contraseñas nunca se guardan.
+const CLAVE_BORRADOR = 'hk-registro-borrador';
+function leerBorrador() {
+  try { return JSON.parse(sessionStorage.getItem(CLAVE_BORRADOR)) || {}; } catch { return {}; }
+}
 
 // Registro con correo y contraseña (ya no hay acceso con Google).
 // La cuenta la crea Ingreso.jsx con onRegistrar → POST /auth/registro.
 // La app bloquea el registro fuera de FECHAS (config.js); el backend de TI
 // aplica las mismas fechas con la hora de su servidor.
 export default function Registro({ onRegistrar, onVolver }) {
-  const [nombreContacto, setNombreContacto] = useState('');
-  const [nombreNegocio, setNombreNegocio] = useState('');
-  const [cedula, setCedula] = useState('');
-  const [correo, setCorreo] = useState('');
-  const [cuentaDropiId, setCuentaDropiId] = useState('');
-  const [paisId, setPaisId] = useState('CO');
-  const [celular, setCelular] = useState('');
-  const [categoria, setCategoria] = useState('');
+  const [borrador] = useState(leerBorrador);
+  const [nombreContacto, setNombreContacto] = useState(borrador.nombreContacto || '');
+  const [nombreNegocio, setNombreNegocio] = useState(borrador.nombreNegocio || '');
+  const [cedula, setCedula] = useState(borrador.cedula || '');
+  const [correo, setCorreo] = useState(borrador.correo || '');
+  const [cuentaDropiId, setCuentaDropiId] = useState(borrador.cuentaDropiId || '');
+  const [paisId, setPaisId] = useState(borrador.paisId || 'CO');
+  const [celular, setCelular] = useState(borrador.celular || '');
+  const [categoria, setCategoria] = useState(borrador.categoria || '');
   const [password, setPassword] = useState('');
   const [passwordConfirmacion, setPasswordConfirmacion] = useState('');
-  const [aceptaTerminos, setAceptaTerminos] = useState(false);
-  const [aceptaPolitica, setAceptaPolitica] = useState(false);
+  const [aceptaTerminos, setAceptaTerminos] = useState(Boolean(borrador.aceptaTerminos));
+  const [aceptaPolitica, setAceptaPolitica] = useState(Boolean(borrador.aceptaPolitica));
+  const [aceptaComunicaciones, setAceptaComunicaciones] = useState(Boolean(borrador.aceptaComunicaciones)); // opcional
   const [error, setError] = useState('');
   const [cargando, setCargando] = useState(false);
 
   const estado = estadoRegistro();
+
+  // Guarda el borrador en cada cambio (sin contraseñas)
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(CLAVE_BORRADOR, JSON.stringify({
+        nombreContacto, nombreNegocio, cedula, correo, cuentaDropiId, paisId, celular,
+        categoria, aceptaTerminos, aceptaPolitica, aceptaComunicaciones,
+      }));
+    } catch { /* sin almacenamiento disponible */ }
+  }, [nombreContacto, nombreNegocio, cedula, correo, cuentaDropiId, paisId, celular,
+      categoria, aceptaTerminos, aceptaPolitica, aceptaComunicaciones]);
 
   async function handleRegistrar(e) {
     e.preventDefault();
@@ -58,8 +79,10 @@ export default function Registro({ onRegistrar, onVolver }) {
           version_terminos: '1.0',
           terminos: true,
           politica_datos: true,
+          comunicaciones_comerciales: aceptaComunicaciones,
         },
       });
+      try { sessionStorage.removeItem(CLAVE_BORRADOR); } catch { /* nada */ }
     } catch (err) {
       console.error(err);
       setError(mensajeDeError(err));
@@ -159,6 +182,7 @@ export default function Registro({ onRegistrar, onVolver }) {
 
         <CasillaTerminos marcada={aceptaTerminos} onCambio={setAceptaTerminos} />
         <CasillaPolitica marcada={aceptaPolitica} onCambio={setAceptaPolitica} />
+        <CasillaComunicaciones marcada={aceptaComunicaciones} onCambio={setAceptaComunicaciones} />
 
         {error && <p className="mensaje mensaje--error" role="alert">{error}</p>}
 
