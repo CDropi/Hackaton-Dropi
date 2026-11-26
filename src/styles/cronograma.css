@@ -1,0 +1,220 @@
+/* ============================================================
+   cronograma.css — los 4 lives del bootcamp en tarjetas tipo afiche
+   ============================================================ */
+.cronograma-zona{
+  font-size:var(--fs-pequeno);
+  color:var(--texto-tenue);
+  text-align:center;
+  margin:0 0 14px;
+}
+
+/* Celular: una tarjeta debajo de otra. Tableta: 2 columnas. Computador: 4 */
+.bootcamp{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:16px;
+}
+@media (min-width:560px){
+  .bootcamp{grid-template-columns:repeat(2, minmax(0,1fr));}
+}
+
+/* La tarjeta continúa el marco gris de la foto por debajo, para la franja
+   del día y el estado. Medidas tomadas del afiche (1003 × 1305 px): el borde
+   naranja está a 6,7 % de los lados, 5,5 % arriba y 5,6 % abajo. */
+.bootcamp-tarjeta{
+  display:flex;
+  flex-direction:column;
+  padding-bottom:6.8%;
+  background:var(--gris-oscuro);
+  /* Los textos se escalan con el ancho de la tarjeta (unidades cqw) */
+  container-type:inline-size;
+}
+
+.bootcamp-poster{
+  position:relative;
+  display:block;
+  aspect-ratio:1003 / 1305;
+  overflow:hidden;
+  color:#fff;
+  text-decoration:none;
+}
+.bootcamp-foto{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+/* Sin foto: el área del borde con un degradado y la inicial */
+.bootcamp-sin-foto{
+  position:absolute;
+  inset:5.5% 6.9% 5.6% 6.7%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'Anton',Impact,sans-serif;
+  font-weight:400;
+  font-size:160px;
+  line-height:1;
+  color:rgba(255,255,255,.14);
+  background:linear-gradient(170deg, #ff7a1a 0%, #d6431b 45%, #4a1a10 100%);
+  box-shadow:inset 0 0 0 2px var(--naranja);
+}
+
+/* Área dentro del borde naranja, donde van los textos */
+.bootcamp-area{
+  position:absolute;
+  inset:5.5% 6.9% 5.6% 6.7%;
+  overflow:hidden;
+}
+/* Degradado oscuro abajo para que el tema se lea sobre la foto */
+.bootcamp-area::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to bottom, rgba(25,12,8,.45) 0%, transparent 22%, transparent 50%, rgba(25,12,8,.9) 100%);
+  pointer-events:none;
+}
+a.bootcamp-poster:hover .bootcamp-foto{filter:brightness(1.08);}
+
+.bootcamp-cabecera{
+  position:absolute;
+  z-index:1;
+  top:8px;
+  left:9px;
+  right:9px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+}
+.bootcamp-fecha{
+  font-family:'Anton',Impact,sans-serif;
+  font-weight:400;
+  font-size:clamp(16px, 8cqw, 24px);
+  line-height:1;
+}
+.bootcamp-hora{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  font-size:clamp(10.5px, 4.2cqw, 13px);
+  line-height:1.25;
+  text-transform:uppercase;
+}
+
+.bootcamp-en-vivo{
+  position:absolute;
+  z-index:1;
+  top:36px;
+  left:9px;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:3px 9px;
+  font-size:clamp(10.5px, 4.2cqw, 13px);
+  font-weight:700;
+  background:var(--naranja);
+}
+.bootcamp-en-vivo-punto{
+  width:7px;height:7px;
+  border-radius:50%;
+  background:#fff;
+  animation:latido 1.4s ease-in-out infinite;
+}
+@keyframes latido{50%{opacity:.25;}}
+@media (prefers-reduced-motion:reduce){
+  .bootcamp-en-vivo-punto{animation:none;}
+}
+
+.bootcamp-nombre{
+  position:absolute;
+  z-index:1;
+  right:9px;
+  bottom:34%;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  text-align:right;
+  line-height:1;
+}
+.bootcamp-conferencista{font-size:clamp(14px, 6.4cqw, 20px);}
+.bootcamp-empresa{
+  font-family:'Anton',Impact,sans-serif;
+  font-weight:400;
+  font-size:clamp(16px, 8.2cqw, 25px);
+  margin-top:2px;
+}
+.bootcamp-tema{
+  position:absolute;
+  z-index:1;
+  left:10px;
+  right:10px;
+  bottom:10px;
+  margin:0;
+  font-size:clamp(11px, 4.4cqw, 14px);
+  line-height:1.35;
+}
+
+/* La franja del día queda pegada al borde naranja, del mismo ancho */
+.bootcamp-pie{
+  position:relative;
+  margin:-7.3% 6.9% 0 6.7%;
+  padding:8px 6px;
+  font-family:'Anton',Impact,sans-serif;
+  font-weight:400;
+  font-size:clamp(17px, 8.5cqw, 26px);
+  line-height:1;
+  text-align:center;
+  text-transform:uppercase;
+  background:var(--naranja);
+}
+/* Espacio debajo de la franja: el botón o el estado, centrado en el alto que
+   quede (en computador las 4 tarjetas miden lo mismo) */
+.bootcamp-accion{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  margin:10px 6.7% 0;
+  min-height:44px;
+}
+.bootcamp-estado{
+  margin:0;
+  font-size:var(--fs-pequeno);
+  line-height:1.35;
+  text-align:center;
+  color:var(--texto-tenue);
+}
+.bootcamp-finalizado{
+  margin:0;
+  font-family:'Anton',Impact,sans-serif;
+  font-weight:400;
+  font-size:clamp(20px, 10cqw, 30px);
+  line-height:1;
+  text-align:center;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  color:var(--claude);
+}
+.bootcamp-tarjeta--finalizada .bootcamp-poster{opacity:.55;}
+
+/* Botón a YouTube (en vivo) o "Próximamente" (antes del live) */
+.bootcamp-boton{
+  width:100%;
+  padding:10px 12px;
+  font-size:clamp(12.5px, 5cqw, 15px);
+}
+.bootcamp-boton img{width:18px;height:18px;}
+.bootcamp-boton--inactivo{cursor:default;color:var(--texto-suave);}
+
+@media (min-width:960px){
+  .cronograma-zona{text-align:left;}
+  .bootcamp{grid-template-columns:repeat(4, minmax(0,1fr));}
+  .bootcamp-sin-foto{font-size:120px;}
+}
+
+/* Discord va debajo de los lives */
+.cronograma .tarjeta-discord{margin:24px 0 0;}

@@ -1,0 +1,88 @@
+import { PAISES, URL_POLITICA_DATOS, URL_TERMINOS } from '../config.js';
+import { Link } from 'react-router-dom';
+import SelectorPais from './SelectorPais.jsx';
+
+// Piezas del formulario de registro: celular (WhatsApp) con indicativo y
+// las casillas de autorización.
+
+export function CampoCelular({ pais, onCambioPais, celular, onCambioCelular }) {
+  return (
+    <div className="campo-celular">
+      <SelectorPais valor={pais} onCambio={onCambioPais} />
+      <label htmlFor="numeroCelular" className="sr-only">Número de celular</label>
+      <input
+        id="numeroCelular"
+        className="campo-input campo-celular-numero"
+        inputMode="tel"
+        autoComplete="tel-national"
+        placeholder="WhatsApp"
+        value={celular}
+        onChange={e => onCambioCelular(e.target.value.replace(/[^0-9 ]/g, ''))}
+      />
+    </div>
+  );
+}
+
+export function CasillaTerminos({ marcada, onCambio }) {
+  return (
+    <label className="casilla-politica">
+      <input type="checkbox" checked={marcada} onChange={e => onCambio(e.target.checked)} />
+      <span>
+        Acepto los{' '}
+        {URL_TERMINOS
+          ? <Link to={URL_TERMINOS}>términos y condiciones</Link>
+          : <strong>términos y condiciones</strong>}{' '}
+        de la Hackatón.
+      </span>
+    </label>
+  );
+}
+
+// Casilla OPCIONAL (numeral 6 de los Términos y numeral 4 de la Política):
+// autoriza el envío de información comercial de Dropi. No marcarla no afecta
+// la participación, por eso no se valida en validarRegistro.
+export function CasillaComunicaciones({ marcada, onCambio }) {
+  return (
+    <label className="casilla-politica">
+      <input type="checkbox" checked={marcada} onChange={e => onCambio(e.target.checked)} />
+      <span>
+        Quiero recibir información comercial de Dropi sobre productos, servicios, eventos y programas.{' '}
+        <span className="casilla-opcional">(Opcional)</span>
+      </span>
+    </label>
+  );
+}
+
+export function CasillaPolitica({ marcada, onCambio }) {
+  return (
+    <label className="casilla-politica">
+      <input type="checkbox" checked={marcada} onChange={e => onCambio(e.target.checked)} />
+      <span>
+        Autorizo el tratamiento de mis datos según la{' '}
+        <Link to={URL_POLITICA_DATOS}>política de tratamiento de datos</Link>{' '}
+        de Dropi.
+      </span>
+    </label>
+  );
+}
+
+// "+573001234567": formato internacional sin espacios, como lo pide el
+// contrato de TI (^\+[1-9][0-9]{7,14}$)
+export function armarWhatsapp(paisId, celular) {
+  const indicativo = PAISES.find(p => p.id === paisId)?.indicativo || '';
+  return `${indicativo}${celular.replace(/\D/g, '')}`;
+}
+
+// Valida lo mismo que el backend. Devuelve el mensaje de error o '' si todo
+// está bien.
+export function validarRegistro(d) {
+  const largo = (t) => t.trim().length;
+  if (largo(d.nombreContacto) < 2 || largo(d.nombreContacto) > 80) return 'Escribe tu nombre completo.';
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.correo.trim()) || largo(d.correo) > 120) return 'Escribe un correo válido.';
+  if (!/^\+[1-9][0-9]{7,14}$/.test(armarWhatsapp(d.paisId, d.celular))) return 'Escribe un número de WhatsApp válido.';
+  if (d.password.length < 8 || d.password.length > 128) return 'La contraseña debe tener al menos 8 caracteres.';
+  if (d.password !== d.passwordConfirmacion) return 'Las contraseñas no coinciden.';
+  if (!d.aceptaTerminos) return 'Para participar debes aceptar los términos y condiciones.';
+  if (!d.aceptaPolitica) return 'Para participar debes autorizar el tratamiento de tus datos.';
+  return '';
+}

@@ -1,0 +1,305 @@
+/* ============================================================
+   base.css — tipografías, variables y piezas compartidas por todas
+   las pantallas (acceso, app del participante y páginas legales).
+   Fuentes: Anton (títulos, siempre en mayúsculas) y Montserrat (textos),
+   cargadas desde Google Fonts en index.html.
+   ============================================================ */
+
+:root{
+  /* Paleta de la Hackatón */
+  --gris-oscuro:#28201d;
+  --claude:#de7356;
+  --naranja:#ff6102;
+  --naranja-hover:#e65600;
+
+  --bg:var(--gris-oscuro);
+  --paper:#FBF9F3;
+  --texto-suave:rgba(255,255,255,.74);
+  --texto-tenue:rgba(255,255,255,.55);
+  --linea:rgba(255,255,255,.16);
+  /* Campos y opciones de formulario: un gris más claro, para que se
+     distingan dentro de las tarjetas gris oscuro */
+  --gris-campo:#3a2f2b;
+  --gris-campo-hover:#463a35;
+  --rojo:#FF8A80;
+
+  /* Corte recto en la esquina superior derecha de las tarjetas.
+     Cambiar --bisel ajusta el tamaño del corte en toda la app (0 lo quita). */
+  --bisel:18px;
+  --forma-bisel:polygon(0 0, calc(100% - var(--bisel)) 0, 100% var(--bisel), 100% 100%, 0 100%);
+  /* Tamaños de texto de toda la app. Son solo cinco:
+       --fs-titulo     título de cada pantalla (Anton)
+       --fs-subtitulo  título de cada sección o tarjeta (Anton)
+       --fs-texto      texto normal, botones y campos
+       --fs-pequeno    texto secundario: ayudas, notas, enlaces pequeños
+       --fs-mini       etiquetas y contadores
+     En computador crecen con el ancho de la pantalla (de 960 a 2560 px). */
+  --fs-titulo:36px;
+  --fs-subtitulo:26px;
+  --fs-texto:clamp(14.5px, calc(14.5px + 3.5 * (100vw - 960px) / 1600), 18px);
+  --fs-pequeno:clamp(12.5px, calc(12.5px + 2.5 * (100vw - 960px) / 1600), 15px);
+  --fs-titulo-lista:clamp(17px, calc(17px + 5 * (100vw - 960px) / 1600), 22px);  /* títulos de los numerales legales */
+  --fs-mini:clamp(11.5px, calc(11.5px + 2.5 * (100vw - 960px) / 1600), 14px);
+  --ancho-contenido:520px;
+  /* Barra lateral de la app en computador: de 248 px a 330 px */
+  --ancho-lateral:clamp(248px, calc(248px + 82 * (100vw - 960px) / 1600), 330px);
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;overflow-x:hidden;}
+body{
+  min-height:100vh;
+  min-height:100dvh;
+  font-family:'Montserrat',system-ui,sans-serif;
+  font-weight:300;
+  color:var(--paper);
+  background-color:var(--bg);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* Fondo de la Hackatón en una capa fija detrás de todo. Se usa un ::before
+   fijo porque iPhone ignora background-attachment:fixed y estira la imagen
+   en páginas largas. Las variables las define main.jsx desde FONDOS. */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  background-color:var(--bg);
+  background-image:var(--fondo-movil);
+  background-size:cover;
+  background-position:top center;
+  background-repeat:no-repeat;
+  pointer-events:none;
+}
+@media (min-width:960px){
+  body::before{background-image:var(--fondo-escritorio);}
+}
+/* Dentro de la app (Reto, Cronograma, Perfil) va el fondo de degradado, en
+   celular y en computador. En computador ocupa solo el área a la derecha de
+   la barra lateral. */
+body.en-app::before{background-image:var(--fondo-app);}
+@media (min-width:960px){
+  body.en-app::before{background-image:var(--fondo-app);left:var(--ancho-lateral);}
+}
+strong,b{font-weight:700;}
+a{color:inherit;}
+
+/* El botón base no tiene estilo propio: cada clase define el suyo */
+button{
+  border:none;
+  background:none;
+  color:inherit;
+  font:inherit;
+  padding:0;
+  margin:0;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+button:disabled{opacity:.55;cursor:default;}
+:focus-visible{outline:2px solid var(--claude);outline-offset:3px;}
+
+.sr-only{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
+}
+
+/* ---- Spinner ---- */
+.spinner{
+  width:16px;height:16px;
+  border:2px solid rgba(255,255,255,.35);
+  border-top-color:#fff;
+  border-radius:50%;
+  display:inline-block;
+  animation:girar .7s linear infinite;
+  vertical-align:middle;
+  margin-right:8px;
+}
+.spinner--claro{width:28px;height:28px;margin:0;}
+@keyframes girar{to{transform:rotate(360deg);}}
+@media (prefers-reduced-motion:reduce){
+  .spinner{animation-duration:2s;}
+}
+
+.pantalla-carga,
+.cargando-bloque{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.pantalla-carga{min-height:100vh;min-height:100dvh;}
+.cargando-bloque{padding:48px 0;}
+
+/* ---- Logo (horizontal: se define el ancho y el alto sale solo) ---- */
+.marca-logo{display:block;margin:0 auto;height:auto;max-width:100%;}
+.marca-logo--grande{width:280px;}
+.marca-logo--pequena{width:170px;}
+
+/* ---- Campos de formulario ---- */
+.campo-input{
+  display:block;
+  width:100%;
+  padding:12px 18px;
+  margin:0 0 12px;
+  border:none;
+  background:var(--gris-campo);
+  color:var(--paper);
+  font:inherit;
+  font-size:var(--fs-texto);
+  text-align:center;
+  outline:none;
+  transition:box-shadow .15s ease, background .15s ease;
+}
+.campo-input::placeholder{color:rgba(255,255,255,.5);font-size:var(--fs-pequeno);}
+/* El foco se marca con una línea interior en color Claude */
+.campo-input:focus{box-shadow:inset 0 0 0 2px var(--claude);background:var(--gris-campo-hover);}
+.campo-input--izquierda{text-align:left;}
+
+.campo-password{position:relative;}
+.campo-input--password{padding-right:48px;padding-left:48px;}
+.campo-password-toggle{
+  position:absolute;
+  top:6px;
+  right:8px;
+  width:34px;height:34px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.campo-password-toggle img{width:19px;height:19px;opacity:.55;transition:opacity .15s ease;}
+.campo-password-toggle:hover img,
+.campo-password-toggle:focus-visible img{opacity:1;}
+
+/* ---- Botones ---- */
+.boton{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  width:100%;
+  padding:12px 22px;
+  font-family:'Montserrat',sans-serif;
+  font-weight:700;
+  font-size:var(--fs-texto);
+  letter-spacing:.02em;
+  text-decoration:none;
+  text-align:center;
+  transition:background .15s ease, transform .1s ease;
+}
+.boton:active:not(:disabled){transform:scale(.98);}
+.boton--primario{
+  background:var(--naranja);
+  border:1px solid var(--naranja);
+  color:#fff;
+}
+.boton--primario:hover:not(:disabled){background:var(--naranja-hover);border-color:var(--naranja-hover);}
+.boton--secundario{
+  background:var(--gris-campo);
+  border:1px solid var(--gris-campo);
+  color:#fff;
+}
+.boton--secundario:hover:not(:disabled){background:var(--gris-campo-hover);border-color:var(--gris-campo-hover);}
+.boton--compacto{width:auto;padding:9px 18px;font-size:var(--fs-pequeno);}
+
+.enlace-texto{
+  display:inline-block;
+  margin:14px auto 0;
+  font-size:var(--fs-pequeno);
+  color:#fff;
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+.enlace-texto--fuerte{margin:0;font-weight:700;}
+
+/* ---- Mensajes ---- */
+.mensaje{
+  font-size:var(--fs-texto);
+  line-height:1.45;
+  margin:0 0 14px;
+  padding:10px 14px;
+  text-align:left;
+}
+.mensaje--error{background:#5c1f14;}
+.mensaje--aviso{background:var(--gris-oscuro);}
+
+.estado-vacio{
+  text-align:center;
+  color:var(--texto-suave);
+  font-size:var(--fs-texto);
+  line-height:1.6;
+  padding:28px 20px;
+  background:var(--gris-oscuro);
+}
+.estado-vacio p{margin:0 0 12px;}
+.estado-vacio p:last-child{margin-bottom:0;}
+
+/* ---- Ventana (envío de la entrega) ---- */
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(28,22,20,.85);
+}
+.modal-caja{
+  width:100%;
+  max-width:400px;
+  padding:26px 22px;
+  background:var(--gris-oscuro);
+}
+.modal-titulo{
+  font-family:'Anton',Impact,sans-serif;
+  font-weight:400;
+  font-size:var(--fs-subtitulo);
+  text-transform:uppercase;
+  letter-spacing:.02em;
+  margin:0 0 10px;
+  line-height:1.05;
+}
+.modal-texto{font-size:var(--fs-texto);line-height:1.55;margin:0 0 12px;color:var(--texto-suave);}
+
+/* ---- Corte recto (bisel) de las tarjetas gris oscuro ----
+   clip-path también recorta lo que sobresalga de la tarjeta (sombras,
+   contornos de foco hacia afuera). */
+.estado-vacio,
+.modal-caja,
+.charla,
+.entrega,
+.perfil-datos,
+.perfil-entrega,
+.perfil-enlace{
+  clip-path:var(--forma-bisel);
+}
+/* Tarjeta clicable: su contorno de foco va hacia adentro para que el bisel no lo corte */
+.perfil-enlace:focus-visible{outline-offset:-3px;}
+
+/* ============================================================
+   Computador (≥ 960px)
+   ============================================================ */
+@media (min-width:960px){
+  :root{
+    --ancho-contenido:880px;
+    --fs-titulo:clamp(52px, calc(52px + 24 * (100vw - 960px) / 1600), 76px);
+    --fs-subtitulo:clamp(30px, calc(30px + 10 * (100vw - 960px) / 1600), 40px);
+  }
+}
+/* Pantallas grandes (anchas y altas): el contenido crece para no verse
+   encogido en el centro. En portátiles bajos se mantiene en 880 px para que
+   el Cronograma quepa sin scroll. */
+@media (min-width:1400px) and (min-height:860px){
+  :root{--ancho-contenido:1160px;}
+}
+@media (min-width:2200px) and (min-height:1100px){
+  :root{--ancho-contenido:1440px;}
+}
+@media (min-width:960px){
+  .solo-movil{display:none;}
+  /* En celular estas tarjetas no tienen fondo: el bisel solo aplica aquí */
+  .acceso--dividido .acceso-card,
+  .perfil-cabecera{
+    clip-path:var(--forma-bisel);
+  }
+}

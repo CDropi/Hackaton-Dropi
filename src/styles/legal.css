@@ -1,0 +1,92 @@
+/* ============================================================
+   legal.css — páginas de términos y condiciones y política de datos
+   ============================================================ */
+.legal{
+  min-height:100vh;
+  min-height:100dvh;
+  padding:calc(20px + env(safe-area-inset-top)) 16px calc(40px + env(safe-area-inset-bottom));
+}
+.legal-cabecera{
+  max-width:clamp(820px, calc(820px + 280 * (100vw - 960px) / 1600), 1100px);
+  margin:0 auto 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.legal-marca{display:block;}
+.legal-marca .marca-logo{width:120px;}
+
+.legal-documento{
+  max-width:clamp(820px, calc(820px + 280 * (100vw - 960px) / 1600), 1100px);
+  margin:0 auto;
+  padding:28px 22px 32px;
+  background:var(--gris-oscuro);
+  clip-path:var(--forma-bisel);
+}
+.legal-titulo{
+  font-family:'Anton',Impact,sans-serif;
+  font-weight:400;
+  font-size:var(--fs-titulo);
+  line-height:1.05;
+  text-transform:uppercase;
+  letter-spacing:.02em;
+  margin:0 0 10px;
+}
+.legal-meta{font-size:var(--fs-pequeno);color:var(--texto-suave);margin:0 0 20px;}
+
+/* Cada numeral es un bloque que se abre y se cierra, dentro de la tarjeta
+   gris oscuro del documento (por eso van en el gris más claro) */
+.legal-secciones{display:flex;flex-direction:column;gap:8px;}
+.legal-seccion{background:var(--gris-campo);}
+.legal-seccion-titulo:hover{background:var(--gris-campo-hover);}
+.legal-seccion-titulo{
+  cursor:pointer;
+  list-style:none;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  padding:14px 20px;
+  font-family:'Anton',Impact,sans-serif;
+  font-weight:400;
+  font-size:var(--fs-titulo-lista);
+  text-transform:uppercase;
+  letter-spacing:.02em;
+  line-height:1.05;
+}
+.legal-seccion-titulo::-webkit-details-marker{display:none;}
+.legal-seccion-titulo::after{
+  content:"+";
+  flex-shrink:0;
+  font-family:'Montserrat',sans-serif;
+  font-size:var(--fs-titulo-lista);
+  color:var(--claude);
+}
+.legal-seccion[open] .legal-seccion-titulo::after{content:"–";}
+.legal-seccion-cuerpo{padding:0 20px 18px;}
+.legal-seccion-cuerpo > :first-child{margin-top:0;}
+
+.legal-h3{
+  font-size:var(--fs-texto);
+  font-weight:700;
+  color:var(--claude);
+  margin:20px 0 8px;
+}
+.legal-p{
+  font-size:var(--fs-texto);
+  line-height:1.7;
+  color:rgba(255,255,255,.86);
+  margin:0 0 12px;
+  white-space:pre-line;
+}
+.legal-p strong{color:#fff;}
+.legal-p a,.legal-otro a{color:var(--claude);overflow-wrap:anywhere;}
+.legal-p--sangria{padding-left:18px;}
+.legal-otro{margin:24px 0 0;font-size:var(--fs-texto);color:var(--texto-suave);}
+
+@media (min-width:960px){
+  .legal{padding-top:40px;}
+  .legal-documento{padding:44px 56px 48px;}
+  .legal-seccion-titulo{padding:18px 28px;}
+  .legal-seccion-cuerpo{padding:0 28px 22px;}
+}

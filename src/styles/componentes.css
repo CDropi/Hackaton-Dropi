@@ -1,0 +1,49 @@
+/* ============================================================
+   componentes.css — piezas reutilizadas por varias pantallas.
+   ============================================================ */
+
+/* ---- Botón de vidrio para regresar ---- */
+.btn-regresar{
+  flex-shrink:0;
+  width:40px;height:40px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(255,255,255,.25);
+  background:linear-gradient(135deg, rgba(255,255,255,.28), rgba(255,255,255,.06));
+  /* Solo la propiedad estándar: Lightning CSS agrega el -webkit- en el build.
+     Escribirla a mano hace que el build borre la estándar. */
+  backdrop-filter:blur(6px) saturate(140%);
+}
+.btn-regresar img{width:17px;height:17px;}
+.btn-regresar:hover img{opacity:.8;}
+
+/* ---- Tarjeta de Discord (Cronograma y Perfil) ---- */
+.tarjeta-discord{
+  margin:0 0 16px;
+  padding:18px 20px;
+  background:var(--gris-oscuro);
+  clip-path:var(--forma-bisel);
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.tarjeta-discord-cabecera{display:flex;gap:14px;align-items:flex-start;}
+.tarjeta-discord-logo{
+  flex-shrink:0;
+  width:44px;height:44px;
+  display:flex;align-items:center;justify-content:center;
+  background:#5865F2; /* color de marca de Discord */
+}
+.tarjeta-discord-logo img{width:24px;height:24px;}
+.tarjeta-discord-titulo{font-family:'Anton',Impact,sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.02em;line-height:1.05;font-size:var(--fs-subtitulo);margin:0 0 4px;}
+.tarjeta-discord-texto{font-size:var(--fs-texto);line-height:1.5;color:var(--texto-suave);margin:0;}
+.tarjeta-discord-estado{font-size:var(--fs-texto);font-weight:700;color:#4cd47a;margin:0;}
+.tarjeta-discord-nota{font-size:var(--fs-pequeno);color:var(--texto-tenue);margin:0;line-height:1.45;}
+.tarjeta-discord .mensaje{margin:0;}
+.boton--discord{background:#5865F2;border:1px solid #5865F2;color:#fff;}
+.boton--discord:hover:not(:disabled){background:#4752c4;border-color:#4752c4;}
+.boton--discord img{width:20px;height:20px;}
+@media (min-width:960px){
+  .boton--discord{width:auto;align-self:flex-start;}
+}

@@ -1,0 +1,199 @@
+/* ============================================================
+   reto.css — guía del concurso y entrega (formulario por pasos)
+   ============================================================ */
+.reto-encabezado{text-align:center;margin-bottom:22px;}
+.reto-titulo{
+  font-family:'Anton',Impact,sans-serif;
+  font-weight:400;
+  font-size:var(--fs-titulo);
+  line-height:1.05;
+  text-transform:uppercase;
+  letter-spacing:.02em;
+  margin:0;
+}
+
+
+/* ---- Entrega ---- */
+.entrega{
+  margin-top:26px;
+  padding:22px 20px;
+  background:var(--gris-oscuro);
+}
+.entrega-titulo{
+  font-family:'Anton',Impact,sans-serif;
+  font-weight:400;
+  font-size:var(--fs-subtitulo);
+  text-transform:uppercase;
+  letter-spacing:.02em;
+  line-height:1.05;
+  margin:0 0 10px;
+}
+.entrega-texto{font-size:var(--fs-texto);line-height:1.55;color:var(--texto-suave);margin:0 0 16px;}
+.entrega-texto strong{color:#fff;}
+
+.entrega-ayuda{
+  font-size:var(--fs-texto);
+  line-height:1.55;
+  margin:0 0 18px;
+  padding:12px 14px;
+  background:rgba(255,255,255,.06);
+}
+.entrega-ayuda summary{cursor:pointer;font-weight:700;}
+.entrega-ayuda p{margin:10px 0 0;color:var(--texto-suave);}
+
+.entrega-etiqueta{display:block;font-size:var(--fs-texto);font-weight:700;margin:0 0 8px;}
+.campo-largo{position:relative;margin-top:6px;}
+.campo-largo-ayuda{font-size:var(--fs-pequeno);color:var(--texto-tenue);margin:-2px 0 8px;line-height:1.4;}
+.campo-textarea{resize:vertical;min-height:120px;line-height:1.5;font-size:var(--fs-texto);margin-bottom:4px;}
+.campo-largo-contador{display:block;text-align:right;font-size:var(--fs-mini);color:var(--texto-tenue);margin-bottom:12px;}
+
+/* ---- Entrega enviada ---- */
+.entrega-enviada-cabecera{display:flex;gap:14px;align-items:center;margin-bottom:14px;}
+.entrega-enviada-cabecera .entrega-titulo{margin-bottom:4px;}
+.entrega-enviada-cabecera .entrega-texto{margin:0;}
+.entrega-enviada-check{
+  flex-shrink:0;
+  width:44px;height:44px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#1f9d4c;
+}
+.entrega-enviada-check img{width:20px;height:auto;}
+.entrega-enlace{
+  display:block;
+  font-size:var(--fs-pequeno);
+  word-break:break-all;
+  color:var(--claude);
+  margin-bottom:18px;
+}
+.entrega-subtitulo{font-size:var(--fs-pequeno);font-weight:700;margin:0 0 6px;color:var(--texto-suave);}
+.entrega-respuesta{font-size:var(--fs-texto);line-height:1.6;margin:0 0 16px;white-space:pre-wrap;}
+
+/* ---- Encabezado del reto ---- */
+.reto-intro{font-size:var(--fs-texto);line-height:1.6;color:#fff;margin:14px auto 0;max-width:60ch;}
+.reto-cierre{font-size:var(--fs-pequeno);color:var(--texto-suave);margin:12px 0 0;}
+.reto-cierre strong{color:#fff;}
+/* ---- Banner hacia la landing con las reglas ---- */
+.reto-banner{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  margin:22px 0 18px;
+  padding:20px;
+  background:var(--gris-oscuro);
+  clip-path:var(--forma-bisel);
+  border-left:4px solid var(--naranja);
+}
+.reto-banner-titulo{
+  font-family:'Anton',Impact,sans-serif;
+  font-weight:400;
+  font-size:var(--fs-subtitulo);
+  text-transform:uppercase;
+  letter-spacing:.02em;
+  line-height:1.05;
+  margin:0 0 6px;
+}
+.reto-banner-texto{font-size:var(--fs-texto);line-height:1.55;color:var(--texto-suave);margin:0;}
+
+/* ---- Guion del video (paso 3 de la entrega) ---- */
+.guia-texto{font-size:var(--fs-texto);line-height:1.6;color:var(--texto-suave);margin:0 0 12px;}
+.guia-guion{list-style:none;margin:0 0 14px;padding:0;display:grid;gap:6px;}
+.guia-guion li{display:flex;gap:12px;font-size:var(--fs-texto);padding:10px 12px;background:var(--gris-campo);}
+.guia-guion-tiempo{flex:0 0 74px;font-weight:700;color:var(--claude);}
+
+/* ---- Formulario de entrega ---- */
+.formulario-entrega{display:flex;flex-direction:column;gap:14px;}
+.formulario-entrega > .pasos-entrega{scroll-margin-top:100px;}
+.formulario-entrega .entrega{margin-top:0;}
+
+.pasos-entrega{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;}
+.paso-entrega{
+  width:100%;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:10px 4px;
+  background:var(--gris-oscuro);
+  color:var(--texto-suave);
+  font-size:var(--fs-mini);
+  font-weight:700;
+}
+.paso-entrega:hover{background:var(--gris-campo);}
+.paso-entrega-numero{
+  width:26px;height:26px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--gris-campo);
+  color:#fff;
+}
+.paso-entrega--completo .paso-entrega-numero{background:#1f9d4c;}
+.paso-entrega--activo,
+.paso-entrega--activo:hover{background:var(--naranja);color:#fff;}
+.paso-entrega--activo .paso-entrega-numero{background:rgba(40,32,29,.35);}
+.paso-entrega-titulo{text-align:center;line-height:1.2;}
+
+.grupo-opciones{border:none;padding:0;margin:6px 0 16px;min-width:0;}
+.opciones-chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{
+  padding:9px 14px;
+  background:var(--gris-campo);
+  font-size:var(--fs-pequeno);
+  cursor:pointer;
+  transition:background .15s ease;
+}
+.chip:hover{background:var(--gris-campo-hover);}
+.chip:has(input:focus-visible){outline:2px solid var(--claude);outline-offset:2px;}
+.chip--activo,.chip--activo:hover{background:var(--naranja);font-weight:700;}
+
+.lista-adjuntos{list-style:none;margin:0 0 10px;padding:0;display:grid;gap:6px;}
+.lista-adjuntos li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 12px;background:var(--gris-campo);font-size:var(--fs-pequeno);}
+.lista-adjuntos .enlace-texto{margin:0;}
+
+.campo-video{display:flex;flex-direction:column;gap:12px;}
+.campo-video-actual,.campo-video-elegido{padding:14px 16px;background:var(--gris-campo);}
+.campo-video-actual{display:flex;gap:12px;align-items:center;}
+.campo-video-check{
+  flex-shrink:0;width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:#1f9d4c;
+}
+.campo-video-check img{width:16px;}
+.campo-video-preview{display:block;width:100%;max-height:360px;background:#000;margin-bottom:10px;}
+.campo-video-nombre{font-size:var(--fs-texto);font-weight:700;margin:0;overflow-wrap:anywhere;}
+.campo-video-detalle{font-size:var(--fs-pequeno);color:var(--texto-tenue);margin:4px 0 0;}
+.campo-video-elegido .mensaje{margin:10px 0 0;}
+.campo-video-acciones{display:flex;flex-wrap:wrap;gap:12px;align-items:center;}
+.campo-video-acciones .enlace-texto{margin:0;}
+.campo-video-acciones label.boton{cursor:pointer;}
+
+.revision-lista{list-style:none;margin:0 0 16px;padding:0;display:grid;gap:6px;}
+.revision-lista li{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--gris-campo);font-size:var(--fs-texto);}
+.revision-ok strong{color:#4cd47a;}
+.revision-falta strong{color:var(--rojo);}
+.revision-lista .enlace-texto{margin:0;}
+.revision-aceptaciones{margin-bottom:6px;}
+
+.entrega-acciones{display:flex;gap:10px;margin-top:8px;}
+.entrega-acciones .boton{flex:1;}
+.entrega-borrador{font-size:var(--fs-mini);color:var(--texto-tenue);text-align:center;margin:12px 0 0;}
+.entrega-editar{padding:12px 14px;margin-bottom:18px;background:var(--gris-campo);}
+.entrega-editar .entrega-texto{margin:0 0 10px;}
+.entrega-respuesta--suave{color:var(--texto-suave);font-size:var(--fs-pequeno);}
+
+.barra-progreso{height:10px;background:var(--gris-campo);margin:6px 0 12px;}
+.barra-progreso span{display:block;height:100%;background:var(--naranja);transition:width .2s ease;}
+
+/* ---- Computador ---- */
+@media (min-width:960px){
+  .reto-encabezado{text-align:left;}
+  .reto-intro{margin-left:0;}
+  .reto-banner{flex-direction:row;align-items:center;justify-content:space-between;gap:28px;padding:24px 28px;}
+  .reto-banner-boton{width:auto;flex-shrink:0;}
+}
+
+/* Próximas fechas (anuncio de ganadores y gala), después del cierre */
+.reto-final{
+  margin:0 0 18px;
+  padding:20px;
+  background:var(--gris-oscuro);
+  clip-path:var(--forma-bisel);
+  border-left:4px solid var(--naranja);
+}
+.reto-final-lista{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:var(--fs-texto);line-height:1.5;color:var(--texto-suave);}
+.reto-final-lista strong{color:#fff;}
